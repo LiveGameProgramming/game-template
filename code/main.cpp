@@ -5,6 +5,7 @@ int32_t main()
     using namespace engine::core;
 
     const auto factory = WindowFactory::create();
+
     const auto window  = factory->create_window();
     const auto events  = factory->create_events();
     const auto context = factory->create_context();
