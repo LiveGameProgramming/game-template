@@ -1,31 +1,21 @@
-#include <core/window_factory.hpp>
+#include <core/window_manager.hpp>
 
 int32_t main()
 {
     using namespace engine::core;
 
-    const auto factory = WindowFactory::create();
+    WindowManager::instance().create({ });
+    WindowManager::instance().display();
 
-    const auto window  = factory->create_window();
-    const auto events  = factory->create_events();
-    const auto context = factory->create_context();
-
-    window->title("Game Template").create();
-    context->create(window->handle());
-
-    window->display();
-
-    while (true)
+    while (WindowManager::instance().is_active())
     {
         //glClearColor(1.0f, 0.5f, 0.0f, 1.0f);
         //glClear(GL_COLOR_BUFFER_BIT);
 
-        context->update();
-        events->update();
+        WindowManager::instance().update();
     }
 
-    context->destroy();
-    window->destroy();
+    WindowManager::instance().destroy();
 
     return 0;
 }
