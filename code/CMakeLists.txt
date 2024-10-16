@@ -1,5 +1,3 @@
-add_executable(${PROJECT_NAME})
-
 target_precompile_headers(${PROJECT_NAME} PRIVATE private.hpp)
 target_link_libraries(${PROJECT_NAME}     PRIVATE engine_platform engine_graphics)
 target_sources(${PROJECT_NAME}            PRIVATE main.cpp)
