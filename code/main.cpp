@@ -2,6 +2,7 @@
 
 #include <opengl/functions_loader.hpp>
 #include <opengl/commands.hpp>
+#include <opengl/pipeline.hpp>
 #include <opengl/macros.hpp>
 
 int32_t main()
@@ -15,6 +16,8 @@ int32_t main()
 
     gl::FunctionsLoader::init_core();
     gl::FunctionsLoader::init_extensions();
+
+    gl::Pipeline::enable(gl::framebuffer_srgb);
 
     while (core::WindowManager::instance().is_active())
     {
