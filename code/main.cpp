@@ -3,6 +3,7 @@
 #include <opengl/functions_loader.hpp>
 #include <opengl/commands.hpp>
 #include <opengl/pipeline.hpp>
+#include <opengl/buffer.hpp>
 #include <opengl/macros.hpp>
 
 int32_t main()
@@ -19,6 +20,9 @@ int32_t main()
 
     gl::Pipeline::enable(gl::framebuffer_srgb);
 
+    gl::Buffer vertex_buffer;
+    vertex_buffer.create();
+
     while (core::WindowManager::instance().is_active())
     {
         gl::Commands::clear(1.0f, 0.5f, 0.0f);
@@ -26,6 +30,8 @@ int32_t main()
 
         core::WindowManager::instance().update();
     }
+
+    vertex_buffer.destroy();
 
     core::WindowManager::instance().destroy();
 
