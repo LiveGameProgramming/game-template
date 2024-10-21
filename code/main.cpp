@@ -35,6 +35,7 @@ int32_t main()
     gl::VertexArray vertex_array;
     vertex_array.create();
     vertex_array.attach_vertices(vertex_buffer, sizeof(math::vec3));
+    vertex_array.attribute({ 0, 3, gl::type_float });
 
     while (core::WindowManager::instance().is_active())
     {
