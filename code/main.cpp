@@ -13,7 +13,7 @@ int32_t main()
 
     core::Context::init_extensions();
 
-    core::WindowManager::instance().create({ });
+    core::WindowManager::instance().create({ }, { });
     core::WindowManager::instance().display();
 
     gl::FunctionsLoader::init_core();
