@@ -8,7 +8,6 @@
 #include <opengl/vertex_array.hpp>
 #include <opengl/shader.hpp>
 
-#include <math/vec3.hpp>
 #include <math/mat4.hpp>
 
 int32_t main()
@@ -17,7 +16,7 @@ int32_t main()
 
     core::Context::init_extensions();
 
-    core::WindowManager::instance().create({ }, { });
+    core::WindowManager::instance().create({ .size = { 1280, 1024 } }, { });
     core::WindowManager::instance().display();
 
     gl::FunctionsLoader::init_core();
@@ -75,6 +74,15 @@ int32_t main()
     vertex_array.attach_indices(index_buffer);
     vertex_array.attribute({ 0, 3, gl::type_float });
 
+    const float aspect_ratio = static_cast<float>(core::WindowManager::instance().width()) /
+                               static_cast<float>(core::WindowManager::instance().height());
+    math::mat4 proj;
+    proj.perspective(45.0f, aspect_ratio, 0.1f, 100.0f);
+
+    math::mat4 view;
+    view.identity();
+    view.translate({ 0.0f, 0.0f, -5.0f });
+
     while (core::WindowManager::instance().is_active())
     {
         gl::Commands::clear(1.0f, 0.5f, 0.0f);
@@ -84,10 +92,12 @@ int32_t main()
 
         math::mat4 model;
         model.identity();
+        model.translate({ 1.0f, 0.0f, 0.0f });
+        model.scale({ 0.5f });
 
         vertex_array.bind();
 
-        default_shader.push_mat4(0, model);
+        default_shader.push_mat4(0, proj * view * model);
 
         gl::Commands::draw_indexed(gl::triangles, static_cast<int32_t>(indices.size()));
 
