@@ -90,12 +90,12 @@ int32_t main()
 
         default_shader.bind();
 
+        vertex_array.bind();
+
         math::mat4 model;
         model.identity();
         model.translate({ 1.0f, 0.0f, 0.0f });
         model.scale({ 0.5f });
-
-        vertex_array.bind();
 
         default_shader.push_mat4(0, proj * view * model);
 
