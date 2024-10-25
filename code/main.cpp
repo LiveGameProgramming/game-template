@@ -9,6 +9,7 @@
 #include <opengl/shader.hpp>
 
 #include <math/vec3.hpp>
+#include <math/mat4.hpp>
 
 int32_t main()
 {
@@ -81,7 +82,12 @@ int32_t main()
 
         default_shader.bind();
 
+        math::mat4 model;
+        model.identity();
+
         vertex_array.bind();
+
+        default_shader.push_mat4(0, model);
 
         gl::Commands::draw_indexed(gl::triangles, static_cast<int32_t>(indices.size()));
 
