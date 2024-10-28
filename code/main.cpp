@@ -1,6 +1,8 @@
 #include <core/window_manager.hpp>
+#include <core/functions.hpp>
 #include <core/file.hpp>
 #include <core/mat4.hpp>
+#include <core/time.hpp>
 
 #include <opengl/functions_loader.hpp>
 #include <opengl/commands.hpp>
@@ -23,6 +25,7 @@ int32_t main()
 
     opengl::Pipeline::enable(opengl::framebuffer_srgb);
     opengl::Pipeline::enable(opengl::multisample);
+    opengl::Pipeline::enable(opengl::cull_face);
 
     #pragma region Shaders
 
@@ -78,11 +81,20 @@ int32_t main()
     core::mat4 proj;
     proj.perspective(60.0f, aspect_ratio, 0.1f, 100.0f);
 
-    core::mat4 view;
-    view.look_at({ 0.0f, 0.0f, 5.0f }, { }, { 0.0f, 1.0f, 0.0f });
+    core::Time time;
+    time.init();
 
     while (core::WindowManager::instance().is_active())
     {
+        time.update();
+
+        const float r = 5.0f;
+        const float x = core::math::sin(core::Time::total_time()) *  r;
+        const float z = core::math::cos(core::Time::total_time()) * -r;
+
+        core::mat4 view;
+        view.look_at({ x, 0.0f, z }, { }, { 0.0f, 1.0f, 0.0f });
+
         opengl::Commands::clear(1.0f, 0.5f, 0.0f);
         opengl::Commands::clear(opengl::color_buffer_bit);
 
