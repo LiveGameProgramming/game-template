@@ -76,11 +76,10 @@ int32_t main()
     const float aspect_ratio = static_cast<float>(core::WindowManager::instance().width()) /
                                static_cast<float>(core::WindowManager::instance().height());
     core::mat4 proj;
-    proj.perspective(45.0f, aspect_ratio, 0.1f, 100.0f);
+    proj.perspective(60.0f, aspect_ratio, 0.1f, 100.0f);
 
     core::mat4 view;
-    view.identity();
-    view.translate({ 0.0f, 0.0f, -5.0f });
+    view.look_at({ 0.0f, 0.0f, 5.0f }, { }, { 0.0f, 1.0f, 0.0f });
 
     while (core::WindowManager::instance().is_active())
     {
@@ -93,8 +92,6 @@ int32_t main()
 
         core::mat4 model;
         model.identity();
-        model.translate({ 1.0f, 0.0f, 0.0f });
-        model.scale({ 0.5f });
 
         default_shader.push_mat4(0, proj * view * model);
 
