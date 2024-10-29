@@ -1,5 +1,5 @@
+#include <core/math/functions.hpp>
 #include <core/window_manager.hpp>
-#include <core/functions.hpp>
 #include <core/file.hpp>
 #include <core/mat4.hpp>
 #include <core/time.hpp>
@@ -58,8 +58,8 @@ int32_t main()
 
     const std::vector<uint32_t> indices
     {
-        0, 1, 2,
-        2, 3, 0
+        2, 1, 0,
+        0, 3, 2
     };
 
     opengl::Buffer vertex_buffer;
@@ -81,6 +81,20 @@ int32_t main()
     core::mat4 proj;
     proj.perspective(60.0f, aspect_ratio, 0.1f, 100.0f);
 
+    core::mat4 view;
+    view.look_at({ 0.0f, 0.0f, 5.0f }, { }, { 0.0f, 1.0f, 0.0f });
+
+    #pragma region Uniform Buffers
+
+    const std::vector camera_data { view, proj };
+
+    opengl::Buffer camera_ubo;
+    camera_ubo.create();
+    camera_ubo.bind();
+    camera_ubo.data(core::BufferData::create(camera_data));
+
+    #pragma endregion
+
     core::Time time;
     time.init();
 
@@ -92,8 +106,8 @@ int32_t main()
         const float x = core::math::sin(core::Time::total_time()) *  r;
         const float z = core::math::cos(core::Time::total_time()) * -r;
 
-        core::mat4 view;
-        view.look_at({ x, 0.0f, z }, { }, { 0.0f, 1.0f, 0.0f });
+        //core::mat4 view;
+        //view.look_at({ x, 0.0f, z }, { }, { 0.0f, 1.0f, 0.0f });
 
         opengl::Commands::clear(1.0f, 0.5f, 0.0f);
         opengl::Commands::clear(opengl::color_buffer_bit);
@@ -105,7 +119,7 @@ int32_t main()
         core::mat4 model;
         model.identity();
 
-        default_shader.push_mat4(0, proj * view * model);
+        default_shader.push_mat4(0, model);
 
         opengl::Commands::draw_indexed(opengl::triangles, static_cast<int32_t>(indices.size()));
 
