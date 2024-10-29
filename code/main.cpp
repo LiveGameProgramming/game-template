@@ -64,11 +64,11 @@ int32_t main()
 
     opengl::Buffer vertex_buffer;
     vertex_buffer.create();
-    vertex_buffer.data(core::BufferData::create(vertices));
+    vertex_buffer.data(core::buffer::data::create(vertices));
 
     opengl::Buffer index_buffer;
     index_buffer.create();
-    index_buffer.data(core::BufferData::create(indices));
+    index_buffer.data(core::buffer::data::create(indices));
 
     opengl::VertexArray vertex_array;
     vertex_array.create();
@@ -91,7 +91,7 @@ int32_t main()
     opengl::Buffer camera_ubo;
     camera_ubo.create();
     camera_ubo.bind();
-    camera_ubo.data(core::BufferData::create(camera_data));
+    camera_ubo.data(core::buffer::data::create(camera_data));
 
     #pragma endregion
 
@@ -108,7 +108,7 @@ int32_t main()
 
         view.look_at({ x, 0.0f, z }, { }, { 0.0f, 1.0f, 0.0f });
 
-        camera_ubo.sub_data(core::BufferData::create(&view));
+        camera_ubo.sub_data(core::buffer::data::create(&view));
 
         opengl::Commands::clear(1.0f, 0.5f, 0.0f);
         opengl::Commands::clear(opengl::color_buffer_bit);
