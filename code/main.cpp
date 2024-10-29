@@ -1,4 +1,5 @@
 #include <core/math/functions.hpp>
+
 #include <core/window_manager.hpp>
 #include <core/file.hpp>
 #include <core/mat4.hpp>
