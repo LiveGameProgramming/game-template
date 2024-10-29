@@ -103,11 +103,12 @@ int32_t main()
         time.update();
 
         const float r = 5.0f;
-        const float x = core::math::sin(core::Time::total_time()) *  r;
-        const float z = core::math::cos(core::Time::total_time()) * -r;
+        const float x = core::math::sin(core::Time::total_time()) * -r;
+        const float z = core::math::cos(core::Time::total_time()) *  r;
 
-        //core::mat4 view;
-        //view.look_at({ x, 0.0f, z }, { }, { 0.0f, 1.0f, 0.0f });
+        view.look_at({ x, 0.0f, z }, { }, { 0.0f, 1.0f, 0.0f });
+
+        camera_ubo.sub_data(core::BufferData::create(&view));
 
         opengl::Commands::clear(1.0f, 0.5f, 0.0f);
         opengl::Commands::clear(opengl::color_buffer_bit);
