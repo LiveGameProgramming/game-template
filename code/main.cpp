@@ -84,7 +84,7 @@ int32_t main()
     proj.perspective(60.0f, aspect_ratio, 0.1f, 100.0f);
 
     base::mat4 view;
-    view.look_at({ 0.0f, 0.0f, 5.0f }, { }, { 0.0f, 1.0f, 0.0f });
+    view.look_at({ 0.0f, 0.0f, 5.0f }, { });
 
     #pragma region Uniform Buffers
 
@@ -104,11 +104,13 @@ int32_t main()
     {
         time.update();
 
-        const float r = 5.0f;
-        const float x = math::sin(base::Time::total_time()) * -r;
-        const float z = math::cos(base::Time::total_time()) *  r;
+        constexpr float camera_speed = 0.25f;
 
-        view.look_at({ x, 0.0f, z }, { }, { 0.0f, 1.0f, 0.0f });
+        const float r = 5.0f;
+        const float x = math::sin(base::Time::total_time() * camera_speed) * -r;
+        const float z = math::cos(base::Time::total_time() * camera_speed) *  r;
+
+        view.look_at({ x, 0.0f, z }, { });
 
         camera_ubo.sub_data(buffers::data::create(&view));
 
