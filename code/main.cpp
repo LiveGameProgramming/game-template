@@ -1,5 +1,3 @@
-#include <base/math/functions.hpp>
-
 #include <base/window_manager.hpp>
 #include <base/file.hpp>
 #include <base/mat4.hpp>
@@ -11,6 +9,8 @@
 
 #include <opengl/vertex_array.hpp>
 #include <opengl/shader.hpp>
+
+#include <math/functions.hpp>
 
 int32_t main()
 {
@@ -104,8 +104,8 @@ int32_t main()
         time.update();
 
         const float r = 5.0f;
-        const float x = base::math::sin(base::Time::total_time()) * -r;
-        const float z = base::math::cos(base::Time::total_time()) *  r;
+        const float x = math::sin(base::Time::total_time()) * -r;
+        const float z = math::cos(base::Time::total_time()) *  r;
 
         view.look_at({ x, 0.0f, z }, { }, { 0.0f, 1.0f, 0.0f });
 
