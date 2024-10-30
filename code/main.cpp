@@ -30,11 +30,12 @@ int32_t main()
 
     #pragma region Shaders
 
-    opengl::ShaderStage vertex_stage { opengl::vertex_stage };
-    vertex_stage.create();
-    vertex_stage.source(base::File::read("default_shader.vert", std::ios::binary));
-
+    opengl::ShaderStage vertex_stage   { opengl::vertex_stage   };
     opengl::ShaderStage fragment_stage { opengl::fragment_stage };
+
+    vertex_stage.create();
+    vertex_stage.source(base::File::read("default_shader.vert",   std::ios::binary));
+
     fragment_stage.create();
     fragment_stage.source(base::File::read("default_shader.frag", std::ios::binary));
 
@@ -65,11 +66,11 @@ int32_t main()
 
     opengl::Buffer vertex_buffer;
     vertex_buffer.create();
-    vertex_buffer.data(base::buffer::data::create(vertices));
+    vertex_buffer.data(buffers::data::create(vertices));
 
     opengl::Buffer index_buffer;
     index_buffer.create();
-    index_buffer.data(base::buffer::data::create(indices));
+    index_buffer.data(buffers::data::create(indices));
 
     opengl::VertexArray vertex_array;
     vertex_array.create();
@@ -92,7 +93,7 @@ int32_t main()
     opengl::Buffer camera_ubo;
     camera_ubo.create();
     camera_ubo.bind();
-    camera_ubo.data(base::buffer::data::create(camera_data));
+    camera_ubo.data(buffers::data::create(camera_data));
 
     #pragma endregion
 
@@ -109,7 +110,7 @@ int32_t main()
 
         view.look_at({ x, 0.0f, z }, { }, { 0.0f, 1.0f, 0.0f });
 
-        camera_ubo.sub_data(base::buffer::data::create(&view));
+        camera_ubo.sub_data(buffers::data::create(&view));
 
         opengl::Commands::clear(1.0f, 0.5f, 0.0f);
         opengl::Commands::clear(opengl::color_buffer_bit);
