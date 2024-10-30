@@ -2,6 +2,7 @@
 #include <base/file.hpp>
 #include <base/mat4.hpp>
 #include <base/time.hpp>
+#include <base/primitives.hpp>
 
 #include <opengl/functions_loader.hpp>
 #include <opengl/commands.hpp>
@@ -24,9 +25,7 @@ int32_t main()
     opengl::FunctionsLoader::init_core();
     opengl::FunctionsLoader::init_extensions();
 
-    opengl::Pipeline::enable(opengl::framebuffer_srgb);
-    opengl::Pipeline::enable(opengl::multisample);
-    opengl::Pipeline::enable(opengl::cull_face);
+    opengl::Pipeline::default_state();
 
     #pragma region Shaders
 
@@ -50,31 +49,19 @@ int32_t main()
 
     #pragma endregion
 
-    const std::vector<base::vec3> vertices
-    {
-        { -0.5f,  0.5f, 0.0f },
-        {  0.5f,  0.5f, 0.0f },
-        {  0.5f, -0.5f, 0.0f },
-        { -0.5f, -0.5f, 0.0f }
-    };
-
-    const std::vector<uint32_t> indices
-    {
-        2, 1, 0,
-        0, 3, 2
-    };
+    auto [plane_vertices, plane_indices] = editor::base::Primitives::create_plane(5.0f, 5.0f);
 
     opengl::Buffer vertex_buffer;
     vertex_buffer.create();
-    vertex_buffer.data(buffers::data::create(vertices));
+    vertex_buffer.data(buffers::data::create(plane_vertices));
 
     opengl::Buffer index_buffer;
     index_buffer.create();
-    index_buffer.data(buffers::data::create(indices));
+    index_buffer.data(buffers::data::create(plane_indices));
 
     opengl::VertexArray vertex_array;
     vertex_array.create();
-    vertex_array.attach_vertices(vertex_buffer, sizeof(base::vec3));
+    vertex_array.attach_vertices(vertex_buffer, sizeof(editor::base::vertex));
     vertex_array.attach_indices(index_buffer);
     vertex_array.attribute({ 0, 3, opengl::type_float });
 
@@ -84,7 +71,7 @@ int32_t main()
     proj.perspective(60.0f, aspect_ratio, 0.1f, 100.0f);
 
     base::mat4 view;
-    view.look_at({ 0.0f, 0.0f, 5.0f }, { });
+    view.look_at({ 0.0f, 2.5f, 5.0f }, { });
 
     #pragma region Uniform Buffers
 
@@ -110,12 +97,12 @@ int32_t main()
         const float x = math::sin(base::Time::total_time() * camera_speed) * -r;
         const float z = math::cos(base::Time::total_time() * camera_speed) *  r;
 
-        view.look_at({ x, 0.0f, z }, { });
+        view.look_at({ x, 2.5f, z }, { });
 
         camera_ubo.sub_data(buffers::data::create(&view));
 
         opengl::Commands::clear(1.0f, 0.5f, 0.0f);
-        opengl::Commands::clear(opengl::color_buffer_bit);
+        opengl::Commands::clear(opengl::color_buffer);
 
         default_shader.bind();
 
@@ -126,7 +113,7 @@ int32_t main()
 
         default_shader.push_mat4(0, model);
 
-        opengl::Commands::draw_indexed(opengl::triangles, static_cast<int32_t>(indices.size()));
+        opengl::Commands::draw_indexed(opengl::triangles, static_cast<int32_t>(plane_indices.size()));
 
         base::WindowManager::instance().update();
     }
