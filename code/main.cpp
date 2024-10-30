@@ -133,6 +133,8 @@ int32_t main()
     vertex_buffer.destroy();
     vertex_array.destroy();
 
+    camera_ubo.destroy();
+
     default_shader.destroy();
 
     base::WindowManager::instance().destroy();
