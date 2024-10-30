@@ -1,9 +1,9 @@
-#include <core/math/functions.hpp>
+#include <base/math/functions.hpp>
 
-#include <core/window_manager.hpp>
-#include <core/file.hpp>
-#include <core/mat4.hpp>
-#include <core/time.hpp>
+#include <base/window_manager.hpp>
+#include <base/file.hpp>
+#include <base/mat4.hpp>
+#include <base/time.hpp>
 
 #include <opengl/functions_loader.hpp>
 #include <opengl/commands.hpp>
@@ -16,10 +16,10 @@ int32_t main()
 {
     using namespace engine;
 
-    core::Context::init_extensions();
+    base::Context::init_extensions();
 
-    core::WindowManager::instance().create({ .size = { 1280, 1024 } }, { });
-    core::WindowManager::instance().display();
+    base::WindowManager::instance().create({ .size = { 1280, 1024 } }, { });
+    base::WindowManager::instance().display();
 
     opengl::FunctionsLoader::init_core();
     opengl::FunctionsLoader::init_extensions();
@@ -77,8 +77,8 @@ int32_t main()
     vertex_array.attach_indices(index_buffer);
     vertex_array.attribute({ 0, 3, opengl::type_float });
 
-    const float aspect_ratio = static_cast<float>(core::WindowManager::instance().width()) /
-                               static_cast<float>(core::WindowManager::instance().height());
+    const float aspect_ratio = static_cast<float>(base::WindowManager::instance().width()) /
+                               static_cast<float>(base::WindowManager::instance().height());
     core::mat4 proj;
     proj.perspective(60.0f, aspect_ratio, 0.1f, 100.0f);
 
@@ -96,16 +96,16 @@ int32_t main()
 
     #pragma endregion
 
-    core::Time time;
+    base::Time time;
     time.init();
 
-    while (core::WindowManager::instance().is_active())
+    while (base::WindowManager::instance().is_active())
     {
         time.update();
 
         const float r = 5.0f;
-        const float x = core::math::sin(core::Time::total_time()) * -r;
-        const float z = core::math::cos(core::Time::total_time()) *  r;
+        const float x = core::math::sin(base::Time::total_time()) * -r;
+        const float z = core::math::cos(base::Time::total_time()) *  r;
 
         view.look_at({ x, 0.0f, z }, { }, { 0.0f, 1.0f, 0.0f });
 
@@ -125,7 +125,7 @@ int32_t main()
 
         opengl::Commands::draw_indexed(opengl::triangles, static_cast<int32_t>(indices.size()));
 
-        core::WindowManager::instance().update();
+        base::WindowManager::instance().update();
     }
 
     index_buffer.destroy();
@@ -134,7 +134,7 @@ int32_t main()
 
     default_shader.destroy();
 
-    core::WindowManager::instance().destroy();
+    base::WindowManager::instance().destroy();
 
     return 0;
 }
