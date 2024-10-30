@@ -1,6 +1,3 @@
 [submodule "libraries/engine"]
 	path = libraries/engine
 	url = https://github.com/LiveGameProgramming/game-engine.git
-[submodule "libraries/editor"]
-	path = libraries/editor
-	url = https://github.com/LiveGameProgramming/game-editor.git
