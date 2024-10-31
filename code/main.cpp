@@ -151,7 +151,7 @@ int32_t main()
 
         base::mat4 box_model_matrix;
         box_model_matrix.identity();
-        box_model_matrix.translate({ 0.0f, 1.0f, 1.0f });
+        box_model_matrix.translate({ 0.0f, 1.0f, 0.0f });
         default_shader.push_mat4(0, box_model_matrix);
 
         material_ubo.sub_data(buffers::data::create(&box_color));
