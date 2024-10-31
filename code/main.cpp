@@ -1,3 +1,4 @@
+#include <base/platform_module.hpp>
 #include <base/window_manager.hpp>
 #include <base/file.hpp>
 #include <base/mat4.hpp>
@@ -17,7 +18,7 @@ int32_t main()
 {
     using namespace engine;
 
-    base::Context::init_extensions();
+    base::PlatformModule::init();
 
     base::WindowManager::instance().create({ .size = { 1280, 1024 } }, { });
     base::WindowManager::instance().display();
