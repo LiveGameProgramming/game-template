@@ -45,21 +45,25 @@ int32_t main()
 
     #pragma endregion
 
+    #pragma region Plane
+
     auto [plane_vertices, plane_indices] = editor::base::Primitives::create_plane(5.0f, 5.0f);
 
-    opengl::Buffer vertex_buffer;
-    vertex_buffer.create();
-    vertex_buffer.data(buffers::data::create(plane_vertices));
+    opengl::Buffer plane_vertex_buffer;
+    plane_vertex_buffer.create();
+    plane_vertex_buffer.data(buffers::data::create(plane_vertices));
 
-    opengl::Buffer index_buffer;
-    index_buffer.create();
-    index_buffer.data(buffers::data::create(plane_indices));
+    opengl::Buffer plane_index_buffer;
+    plane_index_buffer.create();
+    plane_index_buffer.data(buffers::data::create(plane_indices));
 
-    opengl::VertexArray vertex_array;
-    vertex_array.create();
-    vertex_array.attach_vertices(vertex_buffer, sizeof(editor::base::vertex));
-    vertex_array.attach_indices(index_buffer);
-    vertex_array.attribute({ 0, 3, opengl::type_float });
+    opengl::VertexArray plane_vertex_array;
+    plane_vertex_array.create();
+    plane_vertex_array.attach_vertices(plane_vertex_buffer, sizeof(editor::base::vertex));
+    plane_vertex_array.attach_indices(plane_index_buffer);
+    plane_vertex_array.attribute({ 0, 3, opengl::type_float });
+
+    #pragma endregion
 
     const float aspect_ratio = static_cast<float>(base::WindowManager::instance().width()) /
                                static_cast<float>(base::WindowManager::instance().height());
@@ -102,7 +106,7 @@ int32_t main()
 
         default_shader.bind();
 
-        vertex_array.bind();
+        plane_vertex_array.bind();
 
         base::mat4 model;
         model.identity();
@@ -114,9 +118,9 @@ int32_t main()
         base::WindowManager::instance().update();
     }
 
-    index_buffer.destroy();
-    vertex_buffer.destroy();
-    vertex_array.destroy();
+    plane_index_buffer.destroy();
+    plane_vertex_buffer.destroy();
+    plane_vertex_array.destroy();
 
     camera_ubo.destroy();
 
