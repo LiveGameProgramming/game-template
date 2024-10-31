@@ -1,15 +1,13 @@
 #include <base/platform_module.hpp>
+#include <base/graphics_module.hpp>
 #include <base/window_manager.hpp>
+#include <base/primitives.hpp>
 #include <base/file.hpp>
 #include <base/mat4.hpp>
 #include <base/time.hpp>
-#include <base/primitives.hpp>
-
-#include <opengl/functions_loader.hpp>
-#include <opengl/commands.hpp>
-#include <opengl/pipeline.hpp>
 
 #include <opengl/vertex_array.hpp>
+#include <opengl/commands.hpp>
 #include <opengl/shader.hpp>
 
 #include <math/functions.hpp>
@@ -23,10 +21,7 @@ int32_t main()
     base::WindowManager::instance().create({ .size = { 1280, 1024 } }, { });
     base::WindowManager::instance().display();
 
-    opengl::FunctionsLoader::init_core();
-    opengl::FunctionsLoader::init_extensions();
-
-    opengl::Pipeline::default_state();
+    base::GraphicsModule::init();
 
     #pragma region Shaders
 
