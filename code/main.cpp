@@ -1,11 +1,12 @@
 #include <base/platform_module.hpp>
 #include <base/graphics_module.hpp>
 #include <base/window_manager.hpp>
-#include <base/primitives.hpp>
 #include <base/file.hpp>
 #include <base/mat4.hpp>
 #include <base/time.hpp>
 #include <base/rgb.hpp>
+
+#include <primitives.hpp>
 
 #include <opengl/vertex_array.hpp>
 #include <opengl/commands.hpp>
@@ -51,7 +52,7 @@ int32_t main()
 
     #pragma region Plane
 
-    auto [plane_vertices, plane_faces] = editor::base::Primitives::create_plane(5.0f, 5.0f);
+    auto [plane_vertices, plane_faces] = editor::Primitives::create_plane(5.0f, 5.0f);
 
     opengl::Buffer plane_vertex_buffer;
     plane_vertex_buffer.create();
@@ -63,14 +64,14 @@ int32_t main()
 
     opengl::VertexArray plane_vertex_array;
     plane_vertex_array.create();
-    plane_vertex_array.attach_vertices(plane_vertex_buffer, sizeof(editor::base::vertex));
+    plane_vertex_array.attach_vertices(plane_vertex_buffer, sizeof(editor::vertex));
     plane_vertex_array.attach_indices(plane_index_buffer);
     plane_vertex_array.attribute({ 0, 3, opengl::type_float });
 
     #pragma endregion
     #pragma region Box
 
-    auto [box_vertices, box_faces] = editor::base::Primitives::create_box();
+    auto [box_vertices, box_faces] = editor::Primitives::create_box();
 
     opengl::Buffer box_vertex_buffer;
     box_vertex_buffer.create();
@@ -82,7 +83,7 @@ int32_t main()
 
     opengl::VertexArray box_vertex_array;
     box_vertex_array.create();
-    box_vertex_array.attach_vertices(box_vertex_buffer, sizeof(editor::base::vertex));
+    box_vertex_array.attach_vertices(box_vertex_buffer, sizeof(editor::vertex));
     box_vertex_array.attach_indices(box_index_buffer);
     box_vertex_array.attribute({ 0, 3, opengl::type_float });
 
