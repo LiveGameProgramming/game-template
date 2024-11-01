@@ -118,8 +118,10 @@ int32_t main()
     base::Time time;
     time.init();
 
-    constexpr base::rgb plane_color { 0.0f, 0.5f, 1.0f };
-    constexpr base::rgb box_color   { 0.7f, 0.5f, 0.8f };
+    constexpr base::rgb plane_color   { 0.420f, 0.357f, 0.584f };
+    constexpr base::rgb box_color     { 0.533f, 0.690f, 0.231f };
+    constexpr base::rgb sphere_color  { 0.969f, 0.792f, 0.788f };
+    constexpr base::rgb capsule_color { 0.573f, 0.659f, 0.820f };
 
     while (base::WindowManager::instance().is_active())
     {
@@ -134,7 +136,7 @@ int32_t main()
         view.look_at(camera_position, { });
         camera_ubo.sub_data(buffers::data::create(&view));
 
-        opengl::Commands::clear(1.0f, 0.5f, 0.0f);
+        opengl::Commands::clear(1.0f, 0.435f, 0.38f);
         opengl::Commands::clear(opengl::color_buffer);
 
         default_shader.bind();
