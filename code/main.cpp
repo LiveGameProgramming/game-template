@@ -10,7 +10,7 @@
 #include <opengl/vertex_array.hpp>
 #include <opengl/commands.hpp>
 #include <opengl/shader.hpp>
-//#include <opengl/pipeline.hpp>
+#include <opengl/pipeline.hpp>
 
 #include <math/functions.hpp>
 
@@ -25,7 +25,7 @@ int32_t main()
 
     GraphicsModule::init();
 
-    //opengl::Pipeline::enable_lines_mode();
+    opengl::Pipeline::enable_lines_mode();
 
     #pragma region Shaders
 
@@ -87,8 +87,27 @@ int32_t main()
     box_vertex_array.attribute({ 0, 3, opengl::type_float });
 
     #pragma endregion
+    #pragma region Sphere
 
-    vec3  camera_position { 0.0f, 2.5,  5.0f };
+    auto [sphere_vertices, sphere_faces] = editor::Primitives::create_sphere();
+
+    opengl::Buffer sphere_vertex_buffer;
+    sphere_vertex_buffer.create();
+    sphere_vertex_buffer.data(buffers::data::create(sphere_vertices));
+
+    opengl::Buffer sphere_index_buffer;
+    sphere_index_buffer.create();
+    sphere_index_buffer.data(buffers::data::create(sphere_faces));
+
+    opengl::VertexArray sphere_vertex_array;
+    sphere_vertex_array.create();
+    sphere_vertex_array.attach_vertices(sphere_vertex_buffer, sizeof(editor::vertex));
+    sphere_vertex_array.attach_indices(sphere_index_buffer);
+    sphere_vertex_array.attribute({ 0, 3, opengl::type_float });
+
+    #pragma endregion
+
+    vec3  camera_position { 0.0f, 0.0, 1.5f }; // 0.0f, 2.5,  5.0f
     const float aspect_ratio = static_cast<float>(WindowManager::instance().width()) /
                                static_cast<float>(WindowManager::instance().height());
     mat4 view;
@@ -134,10 +153,10 @@ int32_t main()
         camera_position.z = math::cos(Time::total_time() * camera_speed) *  camera_radius;
 
         view.look_at(camera_position, { });
-        camera_ubo.sub_data(buffers::data::create(&view));
+        //camera_ubo.sub_data(buffers::data::create(&view));
 
         opengl::Commands::clear(1.0f, 0.435f, 0.38f);
-        opengl::Commands::clear(opengl::color_buffer);
+        opengl::Commands::clear(opengl::color_buffer | opengl::depth_buffer);
 
         default_shader.bind();
 
@@ -157,13 +176,26 @@ int32_t main()
 
         mat4 box_model_matrix;
         box_model_matrix.identity();
-        box_model_matrix.translate({ 0.0f, 1.0f, 0.0f });
+        box_model_matrix.translate({ 2.0f, 0.0f, 0.0f });
         default_shader.push_mat4(0, box_model_matrix);
 
         material_ubo.sub_data(buffers::data::create(&box_color));
 
         box_vertex_array.bind();
         opengl::Commands::draw_indexed(opengl::triangles, static_cast<int32_t>(box_faces.size()) * primitives::triangle::elements);
+
+        #pragma endregion
+        #pragma region Sphere
+
+        mat4 sphere_model_matrix;
+        sphere_model_matrix.identity();
+        sphere_model_matrix.translate({ 0.0f, 0.0f, 0.0f });
+        default_shader.push_mat4(0, sphere_model_matrix);
+
+        material_ubo.sub_data(buffers::data::create(&sphere_color));
+
+        sphere_vertex_array.bind();
+        opengl::Commands::draw_indexed(opengl::triangles, static_cast<int32_t>(sphere_faces.size()) * primitives::triangle::elements);
 
         #pragma endregion
 
@@ -179,6 +211,10 @@ int32_t main()
     box_index_buffer.destroy();
     box_vertex_buffer.destroy();
     box_vertex_array.destroy();
+
+    sphere_index_buffer.destroy();
+    sphere_vertex_buffer.destroy();
+    sphere_vertex_array.destroy();
 
     #pragma endregion
     #pragma region Uniform Buffers
