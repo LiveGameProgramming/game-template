@@ -1,12 +1,11 @@
-#include <base/platform_module.hpp>
-#include <base/graphics_module.hpp>
-#include <base/window_manager.hpp>
-#include <base/mat4.hpp>
-#include <base/rgb.hpp>
-
+#include <platform_module.hpp>
+#include <window_manager.hpp>
+#include <graphics_module.hpp>
 #include <primitives.hpp>
 #include <time.hpp>
 #include <file.hpp>
+#include <mat4.hpp>
+#include <rgb.hpp>
 
 #include <opengl/vertex_array.hpp>
 #include <opengl/commands.hpp>
@@ -19,12 +18,12 @@ int32_t main()
 {
     using namespace engine;
 
-    base::PlatformModule::init();
+    PlatformModule::init();
 
-    base::WindowManager::instance().create({ .size = { 1280, 1024 } }, { });
-    base::WindowManager::instance().display();
+    WindowManager::instance().create({ .size = { 1280, 1024 } }, { });
+    WindowManager::instance().display();
 
-    base::GraphicsModule::init();
+    GraphicsModule::init();
 
     //opengl::Pipeline::enable_lines_mode();
 
@@ -89,13 +88,13 @@ int32_t main()
 
     #pragma endregion
 
-    base::vec3  camera_position { 0.0f, 2.5,  5.0f };
-    const float aspect_ratio = static_cast<float>(base::WindowManager::instance().width()) /
-                               static_cast<float>(base::WindowManager::instance().height());
-    base::mat4 view;
+    vec3  camera_position { 0.0f, 2.5,  5.0f };
+    const float aspect_ratio = static_cast<float>(WindowManager::instance().width()) /
+                               static_cast<float>(WindowManager::instance().height());
+    mat4 view;
     view.look_at(camera_position, { });
 
-    base::mat4 proj;
+    mat4 proj;
     proj.perspective(60.0f, aspect_ratio, 0.1f, 100.0f);
 
     #pragma region Uniform Buffers
@@ -107,7 +106,7 @@ int32_t main()
     camera_ubo.bind();
     camera_ubo.data(buffers::data::create(camera_data));
 
-    constexpr base::rgb default_color = base::rgb::white();
+    constexpr rgb default_color = rgb::white();
 
     opengl::Buffer material_ubo;
     material_ubo.create();
@@ -119,12 +118,12 @@ int32_t main()
     Time time;
     time.init();
 
-    constexpr base::rgb plane_color   { 0.420f, 0.357f, 0.584f };
-    constexpr base::rgb box_color     { 0.533f, 0.690f, 0.231f };
-    constexpr base::rgb sphere_color  { 0.969f, 0.792f, 0.788f };
-    constexpr base::rgb capsule_color { 0.573f, 0.659f, 0.820f };
+    constexpr rgb plane_color   { 0.420f, 0.357f, 0.584f };
+    constexpr rgb box_color     { 0.533f, 0.690f, 0.231f };
+    constexpr rgb sphere_color  { 0.969f, 0.792f, 0.788f };
+    constexpr rgb capsule_color { 0.573f, 0.659f, 0.820f };
 
-    while (base::WindowManager::instance().is_active())
+    while (WindowManager::instance().is_active())
     {
         time.update();
 
@@ -144,7 +143,7 @@ int32_t main()
 
         #pragma region Plane
 
-        base::mat4 plane_model_matrix;
+        mat4 plane_model_matrix;
         plane_model_matrix.identity();
         default_shader.push_mat4(0, plane_model_matrix);
 
@@ -156,7 +155,7 @@ int32_t main()
         #pragma endregion
         #pragma region Box
 
-        base::mat4 box_model_matrix;
+        mat4 box_model_matrix;
         box_model_matrix.identity();
         box_model_matrix.translate({ 0.0f, 1.0f, 0.0f });
         default_shader.push_mat4(0, box_model_matrix);
@@ -168,7 +167,7 @@ int32_t main()
 
         #pragma endregion
 
-        base::WindowManager::instance().update();
+        WindowManager::instance().update();
     }
 
     #pragma region Primitives
@@ -191,7 +190,7 @@ int32_t main()
 
     default_shader.destroy();
 
-    base::WindowManager::instance().destroy();
+    WindowManager::instance().destroy();
 
     return 0;
 }
