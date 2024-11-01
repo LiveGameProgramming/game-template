@@ -88,34 +88,38 @@ int32_t main()
 
     #pragma endregion
 
-    std::vector<base::mat4>  camera_data { 2 };
-
-              base::vec3 camera_position { 0.0f, 2.5, 0.0f };
-    constexpr base::rgb  plane_color     { 0.0f, 0.5f, 1.0f };
-    constexpr base::rgb  box_color       { 0.7f, 0.5f, 0.8f };
-
+    base::vec3  camera_position { 0.0f, 2.5,  5.0f };
     const float aspect_ratio = static_cast<float>(base::WindowManager::instance().width()) /
                                static_cast<float>(base::WindowManager::instance().height());
+    base::mat4 view;
+    view.look_at(camera_position, { });
 
-    camera_data[0].look_at({ 0.0f, 2.5f, 5.0f }, { });
-    camera_data[1].perspective(60.0f, aspect_ratio, 0.1f, 100.0f);
+    base::mat4 proj;
+    proj.perspective(60.0f, aspect_ratio, 0.1f, 100.0f);
 
     #pragma region Uniform Buffers
+
+    const std::vector camera_data { view, proj };
 
     opengl::Buffer camera_ubo;
     camera_ubo.create();
     camera_ubo.bind();
     camera_ubo.data(buffers::data::create(camera_data));
 
+    constexpr base::rgb default_color = base::rgb::white();
+
     opengl::Buffer material_ubo;
     material_ubo.create();
     material_ubo.bind(buffers::location::material);
-    material_ubo.data(buffers::data::create(&plane_color));
+    material_ubo.data(buffers::data::create(&default_color));
 
     #pragma endregion
 
     base::Time time;
     time.init();
+
+    constexpr base::rgb plane_color { 0.0f, 0.5f, 1.0f };
+    constexpr base::rgb box_color   { 0.7f, 0.5f, 0.8f };
 
     while (base::WindowManager::instance().is_active())
     {
@@ -127,8 +131,8 @@ int32_t main()
         camera_position.x = math::sin(base::Time::total_time() * camera_speed) * -camera_radius;
         camera_position.z = math::cos(base::Time::total_time() * camera_speed) *  camera_radius;
 
-        camera_data[0].look_at(camera_position, { });
-        camera_ubo.sub_data(buffers::data::create(&camera_data[0]));
+        view.look_at(camera_position, { });
+        camera_ubo.sub_data(buffers::data::create(&view));
 
         opengl::Commands::clear(1.0f, 0.5f, 0.0f);
         opengl::Commands::clear(opengl::color_buffer);
@@ -175,9 +179,12 @@ int32_t main()
     box_vertex_array.destroy();
 
     #pragma endregion
+    #pragma region Uniform Buffers
 
     camera_ubo.destroy();
     material_ubo.destroy();
+
+    #pragma endregion
 
     default_shader.destroy();
 
