@@ -1,12 +1,12 @@
 #include <base/platform_module.hpp>
 #include <base/graphics_module.hpp>
 #include <base/window_manager.hpp>
-#include <base/file.hpp>
 #include <base/mat4.hpp>
-#include <base/time.hpp>
 #include <base/rgb.hpp>
 
 #include <primitives.hpp>
+#include <time.hpp>
+#include <file.hpp>
 
 #include <opengl/vertex_array.hpp>
 #include <opengl/commands.hpp>
@@ -34,10 +34,10 @@ int32_t main()
     opengl::ShaderStage fragment_stage { opengl::fragment_stage };
 
     vertex_stage.create();
-    vertex_stage.source(base::File::read("default_shader.vert",   std::ios::binary));
+    vertex_stage.source(File::read("default_shader.vert",   std::ios::binary));
 
     fragment_stage.create();
-    fragment_stage.source(base::File::read("default_shader.frag", std::ios::binary));
+    fragment_stage.source(File::read("default_shader.frag", std::ios::binary));
 
     opengl::Shader default_shader;
     default_shader.create();
@@ -116,7 +116,7 @@ int32_t main()
 
     #pragma endregion
 
-    base::Time time;
+    Time time;
     time.init();
 
     constexpr base::rgb plane_color   { 0.420f, 0.357f, 0.584f };
@@ -131,8 +131,8 @@ int32_t main()
         constexpr float camera_speed  = 0.25f;
         constexpr float camera_radius = 5.00f;
 
-        camera_position.x = math::sin(base::Time::total_time() * camera_speed) * -camera_radius;
-        camera_position.z = math::cos(base::Time::total_time() * camera_speed) *  camera_radius;
+        camera_position.x = math::sin(Time::total_time() * camera_speed) * -camera_radius;
+        camera_position.z = math::cos(Time::total_time() * camera_speed) *  camera_radius;
 
         view.look_at(camera_position, { });
         camera_ubo.sub_data(buffers::data::create(&view));
