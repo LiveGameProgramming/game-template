@@ -25,7 +25,7 @@ int32_t main()
 
     GraphicsModule::init();
 
-    opengl::Pipeline::enable_lines_mode();
+    //opengl::Pipeline::enable_lines_mode();
 
     #pragma region Shaders
 
@@ -107,7 +107,7 @@ int32_t main()
 
     #pragma endregion
 
-    vec3  camera_position { 0.0f, 0.0, 1.5f }; // 0.0f, 2.5,  5.0f
+    vec3  camera_position { 0.0f, 2.5, 5.0f };
     const float aspect_ratio = static_cast<float>(WindowManager::instance().width()) /
                                static_cast<float>(WindowManager::instance().height());
     mat4 view;
@@ -153,7 +153,7 @@ int32_t main()
         camera_position.z = math::cos(Time::total_time() * camera_speed) *  camera_radius;
 
         view.look_at(camera_position, { });
-        //camera_ubo.sub_data(buffers::data::create(&view));
+        camera_ubo.sub_data(buffers::data::create(&view));
 
         opengl::Commands::clear(1.0f, 0.435f, 0.38f);
         opengl::Commands::clear(opengl::color_buffer | opengl::depth_buffer);
@@ -176,7 +176,7 @@ int32_t main()
 
         mat4 box_model_matrix;
         box_model_matrix.identity();
-        box_model_matrix.translate({ 2.0f, 0.0f, 0.0f });
+        box_model_matrix.translate({ 1.0f, 1.0f, 0.0f });
         default_shader.push_mat4(0, box_model_matrix);
 
         material_ubo.sub_data(buffers::data::create(&box_color));
@@ -189,7 +189,7 @@ int32_t main()
 
         mat4 sphere_model_matrix;
         sphere_model_matrix.identity();
-        sphere_model_matrix.translate({ 0.0f, 0.0f, 0.0f });
+        sphere_model_matrix.translate({ -1.0f, 1.0f, 0.0f });
         default_shader.push_mat4(0, sphere_model_matrix);
 
         material_ubo.sub_data(buffers::data::create(&sphere_color));
