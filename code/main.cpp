@@ -1,3 +1,9 @@
+#include <opengl/vertex_array.hpp>
+#include <opengl/commands.hpp>
+#include <opengl/shader.hpp>
+
+#include <math/functions.hpp>
+
 #include <platform_module.hpp>
 #include <window_manager.hpp>
 #include <graphics_module.hpp>
@@ -6,13 +12,6 @@
 #include <file.hpp>
 #include <mat4.hpp>
 #include <rgb.hpp>
-
-#include <opengl/vertex_array.hpp>
-#include <opengl/commands.hpp>
-#include <opengl/shader.hpp>
-#include <opengl/pipeline.hpp>
-
-#include <math/functions.hpp>
 
 int32_t main()
 {
@@ -24,8 +23,6 @@ int32_t main()
     WindowManager::instance().display();
 
     GraphicsModule::init();
-
-    //opengl::Pipeline::enable_lines_mode();
 
     #pragma region Shaders
 
