@@ -4,6 +4,9 @@
 
 #include <math/functions.hpp>
 
+#include <data/camera.hpp>
+#include <data/material.hpp>
+
 #include <platform_module.hpp>
 #include <window_manager.hpp>
 #include <graphics_module.hpp>
@@ -105,29 +108,24 @@ int32_t main()
     #pragma endregion
 
     vec3  camera_position { 0.0f, 2.5, 5.0f };
-    const float aspect_ratio = static_cast<float>(WindowManager::instance().width()) /
-                               static_cast<float>(WindowManager::instance().height());
-    mat4 view;
-    view.look_at(camera_position, { });
 
-    mat4 proj;
-    proj.perspective(60.0f, aspect_ratio, 0.1f, 100.0f);
+    data::camera camera;
+    camera.view.look_at(camera_position, { });
+    camera.projection.perspective(60.0f, WindowManager::instance().ratio());
+
+    data::material material;
 
     #pragma region Uniform Buffers
 
-    const std::vector camera_data { view, proj };
+    opengl::Buffer camera_buffer;
+    camera_buffer.create();
+    camera_buffer.bind();
+    camera_buffer.data(buffers::data::create(&camera));
 
-    opengl::Buffer camera_ubo;
-    camera_ubo.create();
-    camera_ubo.bind();
-    camera_ubo.data(buffers::data::create(camera_data));
-
-    constexpr rgb default_color = rgb::white();
-
-    opengl::Buffer material_ubo;
-    material_ubo.create();
-    material_ubo.bind(buffers::location::material);
-    material_ubo.data(buffers::data::create(&default_color));
+    opengl::Buffer material_buffer;
+    material_buffer.create();
+    material_buffer.bind(buffers::location::material);
+    material_buffer.data(buffers::data::create(&material));
 
     #pragma endregion
 
@@ -139,6 +137,12 @@ int32_t main()
     constexpr rgb sphere_color  { 0.969f, 0.792f, 0.788f };
     constexpr rgb capsule_color { 0.573f, 0.659f, 0.820f };
 
+    WindowManager::instance().resize([&camera_buffer, &camera]
+    {
+        camera.projection.perspective(60.0f, WindowManager::instance().ratio());
+        camera_buffer.sub_data(buffers::data::create(&camera.projection), offsetof(data::camera, projection));
+    });
+
     while (WindowManager::instance().is_active())
     {
         time.update();
@@ -149,8 +153,8 @@ int32_t main()
         camera_position.x = math::sin(Time::total_time() * camera_speed) * -camera_radius;
         camera_position.z = math::cos(Time::total_time() * camera_speed) *  camera_radius;
 
-        view.look_at(camera_position, { });
-        camera_ubo.sub_data(buffers::data::create(&view));
+        camera.view.look_at(camera_position, { });
+        camera_buffer.sub_data(buffers::data::create(&camera.view));
 
         opengl::Commands::viewport(0, 0, WindowManager::instance().width(), WindowManager::instance().height());
 
@@ -165,7 +169,7 @@ int32_t main()
         plane_model_matrix.identity();
         default_shader.push_mat4(0, plane_model_matrix);
 
-        material_ubo.sub_data(buffers::data::create(&plane_color));
+        material_buffer.sub_data(buffers::data::create(&plane_color));
 
         plane_vertex_array.bind();
         opengl::Commands::draw_indexed(opengl::triangles, static_cast<int32_t>(plane_faces.size()) * primitives::triangle::elements);
@@ -178,7 +182,7 @@ int32_t main()
         box_model_matrix.translate({ 1.0f, 1.0f, 0.0f });
         default_shader.push_mat4(0, box_model_matrix);
 
-        material_ubo.sub_data(buffers::data::create(&box_color));
+        material_buffer.sub_data(buffers::data::create(&box_color));
 
         box_vertex_array.bind();
         opengl::Commands::draw_indexed(opengl::triangles, static_cast<int32_t>(box_faces.size()) * primitives::triangle::elements);
@@ -191,7 +195,7 @@ int32_t main()
         sphere_model_matrix.translate({ -1.0f, 1.0f, 0.0f });
         default_shader.push_mat4(0, sphere_model_matrix);
 
-        material_ubo.sub_data(buffers::data::create(&sphere_color));
+        material_buffer.sub_data(buffers::data::create(&sphere_color));
 
         sphere_vertex_array.bind();
         opengl::Commands::draw_indexed(opengl::triangles, static_cast<int32_t>(sphere_faces.size()) * primitives::triangle::elements);
@@ -218,8 +222,8 @@ int32_t main()
     #pragma endregion
     #pragma region Uniform Buffers
 
-    camera_ubo.destroy();
-    material_ubo.destroy();
+    camera_buffer.destroy();
+    material_buffer.destroy();
 
     #pragma endregion
 
