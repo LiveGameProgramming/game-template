@@ -20,7 +20,7 @@ int32_t main()
     PlatformModule::init();
 
     WindowManager::instance().create({ .size = { 1280, 1024 } }, { });
-    WindowManager::instance().display();
+    WindowManager::instance().open();
 
     GraphicsModule::init();
 
@@ -151,6 +151,8 @@ int32_t main()
 
         view.look_at(camera_position, { });
         camera_ubo.sub_data(buffers::data::create(&view));
+
+        opengl::Commands::viewport(0, 0, WindowManager::instance().width(), WindowManager::instance().height());
 
         opengl::Commands::clear(1.0f, 0.435f, 0.38f);
         opengl::Commands::clear(opengl::color_buffer | opengl::depth_buffer);
