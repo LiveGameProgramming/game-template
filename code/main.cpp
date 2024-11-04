@@ -6,6 +6,7 @@
 
 #include <data/camera.hpp>
 #include <data/material.hpp>
+#include <data/light.hpp>
 
 #include <platform_module.hpp>
 #include <window_manager.hpp>
@@ -66,6 +67,7 @@ int32_t main()
     plane_vertex_array.attach_vertices(plane_vertex_buffer, sizeof(editor::vertex));
     plane_vertex_array.attach_indices(plane_index_buffer);
     plane_vertex_array.attribute({ 0, 3, opengl::type_float });
+    plane_vertex_array.attribute({ 1, 3, opengl::type_float, offsetof(editor::vertex, extra) });
 
     #pragma endregion
     #pragma region Box
@@ -85,6 +87,7 @@ int32_t main()
     box_vertex_array.attach_vertices(box_vertex_buffer, sizeof(editor::vertex));
     box_vertex_array.attach_indices(box_index_buffer);
     box_vertex_array.attribute({ 0, 3, opengl::type_float });
+    box_vertex_array.attribute({ 1, 3, opengl::type_float, offsetof(editor::vertex, extra) });
 
     #pragma endregion
     #pragma region Sphere
@@ -104,6 +107,7 @@ int32_t main()
     sphere_vertex_array.attach_vertices(sphere_vertex_buffer, sizeof(editor::vertex));
     sphere_vertex_array.attach_indices(sphere_index_buffer);
     sphere_vertex_array.attribute({ 0, 3, opengl::type_float });
+    sphere_vertex_array.attribute({ 1, 3, opengl::type_float, offsetof(editor::vertex, extra) });
 
     #pragma endregion
 
@@ -112,6 +116,12 @@ int32_t main()
     data::camera camera;
     camera.view.look_at(camera_position, { });
     camera.projection.perspective(60.0f, WindowManager::instance().ratio());
+
+    data::light light
+    {
+        .extra   { 0.0f, -1.0f, -1.0f },
+        .ambient { 0.3f }
+    };
 
     data::material material;
 
@@ -126,6 +136,11 @@ int32_t main()
     material_buffer.create();
     material_buffer.bind(buffers::location::material);
     material_buffer.data(buffers::data::create(&material));
+
+    opengl::Buffer light_buffer;
+    light_buffer.create();
+    light_buffer.bind(buffers::location::light);
+    light_buffer.data(buffers::data::create(&light));
 
     #pragma endregion
 
@@ -224,6 +239,7 @@ int32_t main()
 
     camera_buffer.destroy();
     material_buffer.destroy();
+    light_buffer.destroy();
 
     #pragma endregion
 
