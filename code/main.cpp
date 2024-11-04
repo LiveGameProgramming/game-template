@@ -14,8 +14,6 @@
 #include <primitives.hpp>
 #include <time.hpp>
 #include <file.hpp>
-#include <mat4.hpp>
-#include <rgb.hpp>
 
 int32_t main()
 {
@@ -111,7 +109,7 @@ int32_t main()
 
     #pragma endregion
 
-    vec3  camera_position { 0.0f, 2.5, 5.0f };
+    vec3 camera_position { 0.0f, 2.5, 5.0f };
 
     data::camera camera;
     camera.view.look_at(camera_position, { });
