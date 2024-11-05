@@ -1,4 +1,3 @@
-#include <renderers/model.hpp>
 #include <opengl/commands.hpp>
 #include <math/functions.hpp>
 
@@ -9,6 +8,7 @@
 #include <window_manager.hpp>
 #include <platform_module.hpp>
 #include <graphics_module.hpp>
+#include <model_renderer.hpp>
 #include <primitives.hpp>
 #include <time.hpp>
 #include <file.hpp>
@@ -146,7 +146,7 @@ int32_t main()
     constexpr engine::rgb sphere_color  { 0.969f, 0.792f, 0.788f };
     constexpr engine::rgb capsule_color { 0.573f, 0.659f, 0.820f };
 
-    editor::renderers::Model model_renderer;
+    editor::ModelRenderer model_renderer;
     model_renderer.attach(&default_shader);
     model_renderer.attach(&material_buffer);
 
