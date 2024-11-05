@@ -6,8 +6,8 @@
 #include <data/material.hpp>
 #include <data/light.hpp>
 
-#include <platform_module.hpp>
 #include <window_manager.hpp>
+#include <platform_module.hpp>
 #include <graphics_module.hpp>
 #include <primitives.hpp>
 #include <time.hpp>
