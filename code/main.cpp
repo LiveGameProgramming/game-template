@@ -180,9 +180,10 @@ int32_t main()
         camera.view.look(camera_position, { });
         camera_buffer.sub_data(engine::buffers::data::create(&camera.view));
 
-        engine::opengl::Commands::viewport(0, 0, engine::WindowManager::instance().width(), engine::WindowManager::instance().height());
+        const int32_t width  = engine::WindowManager::instance().width();
+        const int32_t height = engine::WindowManager::instance().height();
 
-        engine::opengl::Commands::clear(1.0f, 0.5f, 0.0f);
+        engine::opengl::Commands::viewport(0, 0, width, height);
         engine::opengl::Commands::clear(engine::opengl::color_buffer | engine::opengl::depth_buffer);
 
         model_renderer.bind();
