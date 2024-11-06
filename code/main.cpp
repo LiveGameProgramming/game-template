@@ -141,10 +141,10 @@ int32_t main()
     engine::Time time;
     time.init();
 
-    constexpr engine::rgb plane_color   { 0.420f, 0.357f, 0.584f };
-    constexpr engine::rgb box_color     { 0.533f, 0.690f, 0.231f };
-    constexpr engine::rgb sphere_color  { 0.969f, 0.792f, 0.788f };
-    constexpr engine::rgb capsule_color { 0.573f, 0.659f, 0.820f };
+    constexpr engine::rgb plane_color   { 0.5f, 0.5f, 1.0f };
+    constexpr engine::rgb box_color     { 0.0f, 1.0f, 1.0f };
+    constexpr engine::rgb sphere_color  { 1.0f, 1.0f, 0.0f };
+    constexpr engine::rgb capsule_color { 1.0f, 0.0f, 1.0f };
 
     editor::ModelRenderer model_renderer;
     model_renderer.attach(&default_shader);
@@ -182,7 +182,7 @@ int32_t main()
 
         engine::opengl::Commands::viewport(0, 0, engine::WindowManager::instance().width(), engine::WindowManager::instance().height());
 
-        engine::opengl::Commands::clear(1.0f, 0.435f, 0.38f);
+        engine::opengl::Commands::clear(1.0f, 0.5f, 0.0f);
         engine::opengl::Commands::clear(engine::opengl::color_buffer | engine::opengl::depth_buffer);
 
         model_renderer.bind();
