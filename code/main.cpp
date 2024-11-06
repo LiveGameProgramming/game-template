@@ -192,6 +192,7 @@ int32_t main()
         engine::opengl::Commands::clear(engine::opengl::color_buffer | engine::opengl::depth_buffer);
 
         model_renderer.bind();
+
         model_renderer.draw(&plane_vertex_array,  plane_matrix,  plane_color,  static_cast<int32_t>(plane_faces.size()));
         model_renderer.draw(&box_vertex_array,    box_matrix,    box_color,    static_cast<int32_t>(box_faces.size()));
         model_renderer.draw(&sphere_vertex_array, sphere_matrix, sphere_color, static_cast<int32_t>(sphere_faces.size()));
