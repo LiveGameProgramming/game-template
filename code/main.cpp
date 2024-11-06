@@ -12,6 +12,7 @@
 #include <functions.hpp>
 #include <time.hpp>
 #include <file.hpp>
+#include <quat.hpp>
 
 int32_t main()
 {
@@ -125,10 +126,6 @@ int32_t main()
     engine::mat4 plane_matrix;
     plane_matrix.identity();
 
-    engine::mat4 box_matrix;
-    box_matrix.identity();
-    box_matrix.translate({ 1.0f, 1.0f, 0.0f });
-
     engine::mat4 sphere_matrix;
     sphere_matrix.identity();
     sphere_matrix.translate({ -1.0f, 1.0f, 0.0f });
@@ -179,6 +176,14 @@ int32_t main()
 
         camera.view.look(camera_position, { });
         camera_buffer.sub_data(engine::buffers::data::create(&camera.view));
+
+        engine::quat box_orientation;
+        box_orientation.rotate({ 1.0f, 1.0f, 0.0f }, engine::Time::total_time() * 90.0f);
+
+        engine::mat4 box_matrix;
+        box_matrix.identity();
+        box_matrix.translate({ 1.0f, 1.0f, 0.0f });
+        box_matrix *= box_orientation;
 
         const int32_t width  = engine::WindowManager::instance().width();
         const int32_t height = engine::WindowManager::instance().height();
