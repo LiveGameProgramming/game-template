@@ -1,5 +1,4 @@
 #include <opengl/commands.hpp>
-#include <math/functions.hpp>
 
 #include <data/camera.hpp>
 #include <data/material.hpp>
@@ -10,6 +9,7 @@
 #include <graphics_module.hpp>
 #include <model_renderer.hpp>
 #include <primitives.hpp>
+#include <functions.hpp>
 #include <time.hpp>
 #include <file.hpp>
 
@@ -174,8 +174,8 @@ int32_t main()
         constexpr float camera_speed  = 0.25f;
         constexpr float camera_radius = 5.00f;
 
-        camera_position.x = engine::math::sin(engine::Time::total_time() * camera_speed) * -camera_radius;
-        camera_position.z = engine::math::cos(engine::Time::total_time() * camera_speed) *  camera_radius;
+        camera_position.x = engine::sin(engine::Time::total_time() * camera_speed) * -camera_radius;
+        camera_position.z = engine::cos(engine::Time::total_time() * camera_speed) *  camera_radius;
 
         camera.view.look(camera_position, { });
         camera_buffer.sub_data(engine::buffers::data::create(&camera.view));
