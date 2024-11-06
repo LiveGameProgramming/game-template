@@ -105,6 +105,9 @@ int32_t main()
 
     #pragma endregion
 
+    engine::Time time;
+    time.init();
+
     engine::vec3 camera_position { 0.0f, 2.5, 5.0f };
 
     engine::data::camera camera;
@@ -118,6 +121,22 @@ int32_t main()
     };
 
     engine::data::material material;
+
+    engine::mat4 plane_matrix;
+    plane_matrix.identity();
+
+    engine::mat4 box_matrix;
+    box_matrix.identity();
+    box_matrix.translate({ 1.0f, 1.0f, 0.0f });
+
+    engine::mat4 sphere_matrix;
+    sphere_matrix.identity();
+    sphere_matrix.translate({ -1.0f, 1.0f, 0.0f });
+
+    constexpr engine::rgb plane_color   { 0.5f, 0.5f, 1.0f };
+    constexpr engine::rgb box_color     { 0.0f, 1.0f, 1.0f };
+    constexpr engine::rgb sphere_color  { 1.0f, 1.0f, 0.0f };
+    constexpr engine::rgb capsule_color { 1.0f, 0.0f, 1.0f };
 
     #pragma region Uniform Buffers
 
@@ -137,14 +156,6 @@ int32_t main()
     light_buffer.data(engine::buffers::data::create(&light));
 
     #pragma endregion
-
-    engine::Time time;
-    time.init();
-
-    constexpr engine::rgb plane_color   { 0.5f, 0.5f, 1.0f };
-    constexpr engine::rgb box_color     { 0.0f, 1.0f, 1.0f };
-    constexpr engine::rgb sphere_color  { 1.0f, 1.0f, 0.0f };
-    constexpr engine::rgb capsule_color { 1.0f, 0.0f, 1.0f };
 
     editor::ModelRenderer model_renderer;
     model_renderer.attach(&default_shader);
@@ -169,26 +180,15 @@ int32_t main()
         camera.view.look(camera_position, { });
         camera_buffer.sub_data(engine::buffers::data::create(&camera.view));
 
-        engine::mat4 plane_model_matrix;
-        plane_model_matrix.identity();
-
-        engine::mat4 box_model_matrix;
-        box_model_matrix.identity();
-        box_model_matrix.translate({ 1.0f, 1.0f, 0.0f });
-
-        engine::mat4 sphere_model_matrix;
-        sphere_model_matrix.identity();
-        sphere_model_matrix.translate({ -1.0f, 1.0f, 0.0f });
-
         engine::opengl::Commands::viewport(0, 0, engine::WindowManager::instance().width(), engine::WindowManager::instance().height());
 
         engine::opengl::Commands::clear(1.0f, 0.5f, 0.0f);
         engine::opengl::Commands::clear(engine::opengl::color_buffer | engine::opengl::depth_buffer);
 
         model_renderer.bind();
-        model_renderer.draw(&plane_vertex_array,  plane_model_matrix,  plane_color,  static_cast<int32_t>(plane_faces.size()));
-        model_renderer.draw(&box_vertex_array,    box_model_matrix,    box_color,    static_cast<int32_t>(box_faces.size()));
-        model_renderer.draw(&sphere_vertex_array, sphere_model_matrix, sphere_color, static_cast<int32_t>(sphere_faces.size()));
+        model_renderer.draw(&plane_vertex_array,  plane_matrix,  plane_color,  static_cast<int32_t>(plane_faces.size()));
+        model_renderer.draw(&box_vertex_array,    box_matrix,    box_color,    static_cast<int32_t>(box_faces.size()));
+        model_renderer.draw(&sphere_vertex_array, sphere_matrix, sphere_color, static_cast<int32_t>(sphere_faces.size()));
 
         engine::WindowManager::instance().update();
     }
