@@ -24,8 +24,6 @@ int32_t main()
 
     engine::GraphicsModule::init();
 
-    engine::opengl::Pipeline::enable_lines_mode();
-
     #pragma region Shaders
 
     engine::opengl::ShaderStage vertex_stage   { engine::opengl::vertex_stage   };
@@ -151,7 +149,7 @@ int32_t main()
 
     engine::mat4 sphere_matrix;
     sphere_matrix.identity();
-    sphere_matrix.translate({ -1.0f, 1.0f, 0.0f });
+    sphere_matrix.translate({ 1.0f, 1.0f, -1.0f });
 
     engine::mat4 capsule_matrix;
     capsule_matrix.identity();
@@ -209,7 +207,7 @@ int32_t main()
 
         engine::mat4 box_matrix;
         box_matrix.identity();
-        box_matrix.translate({ 1.0f, 1.0f, 0.0f });
+        box_matrix.translate({ -1.0f, 1.0f, 1.0f });
         box_matrix *= box_orientation;
 
         const int32_t width  = engine::WindowManager::instance().width();
