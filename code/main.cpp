@@ -1,4 +1,5 @@
 #include <opengl/commands.hpp>
+#include <opengl/pipeline.hpp>
 
 #include <data/camera.hpp>
 #include <data/material.hpp>
@@ -22,6 +23,8 @@ int32_t main()
     engine::WindowManager::instance().open();
 
     engine::GraphicsModule::init();
+
+    engine::opengl::Pipeline::enable_lines_mode();
 
     #pragma region Shaders
 
@@ -105,6 +108,26 @@ int32_t main()
     sphere_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::vertex, extra) });
 
     #pragma endregion
+    #pragma region Capsule
+
+    auto [capsule_vertices, capsule_faces] = editor::Primitives::create_capsule();
+
+    engine::opengl::Buffer capsule_vertex_buffer;
+    capsule_vertex_buffer.create();
+    capsule_vertex_buffer.data(engine::buffers::data::create(capsule_vertices));
+
+    engine::opengl::Buffer capsule_index_buffer;
+    capsule_index_buffer.create();
+    capsule_index_buffer.data(engine::buffers::data::create(capsule_faces));
+
+    engine::opengl::VertexArray capsule_vertex_array;
+    capsule_vertex_array.create();
+    capsule_vertex_array.attach_vertices(capsule_vertex_buffer, sizeof(editor::vertex));
+    capsule_vertex_array.attach_indices(capsule_index_buffer);
+    capsule_vertex_array.attribute({ 0, 3, engine::opengl::type_float });
+    capsule_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::vertex, extra) });
+
+    #pragma endregion
 
     engine::Time time;
     time.init();
@@ -130,10 +153,14 @@ int32_t main()
     sphere_matrix.identity();
     sphere_matrix.translate({ -1.0f, 1.0f, 0.0f });
 
+    engine::mat4 capsule_matrix;
+    capsule_matrix.identity();
+    capsule_matrix.translate({ 1.0f, 1.0f, 1.0f });
+
     constexpr engine::rgb plane_color   { 0.5f, 0.5f, 1.0f };
     constexpr engine::rgb box_color     { 0.0f, 1.0f, 1.0f };
     constexpr engine::rgb sphere_color  { 1.0f, 1.0f, 0.0f };
-    constexpr engine::rgb capsule_color { 1.0f, 0.0f, 1.0f };
+    constexpr engine::rgb capsule_color { 1.0f, 0.5f, 0.5f };
 
     #pragma region Uniform Buffers
 
@@ -178,7 +205,7 @@ int32_t main()
         camera_buffer.sub_data(engine::buffers::data::create(&camera.view));
 
         engine::quat box_orientation;
-        box_orientation.rotate({ 1.0f, 1.0f, 0.0f }, engine::Time::total_time() * 90.0f);
+        box_orientation.rotate({ 0.0f, 1.0f, 1.0f }, engine::Time::total_time() * 90.0f);
 
         engine::mat4 box_matrix;
         box_matrix.identity();
@@ -193,14 +220,15 @@ int32_t main()
 
         model_renderer.bind();
 
-        model_renderer.draw(&plane_vertex_array,  plane_matrix,  plane_color,  static_cast<int32_t>(plane_faces.size()));
-        model_renderer.draw(&box_vertex_array,    box_matrix,    box_color,    static_cast<int32_t>(box_faces.size()));
-        model_renderer.draw(&sphere_vertex_array, sphere_matrix, sphere_color, static_cast<int32_t>(sphere_faces.size()));
+        model_renderer.draw(&plane_vertex_array,   plane_matrix,   plane_color,   static_cast<int32_t>(plane_faces.size()));
+        model_renderer.draw(&box_vertex_array,     box_matrix,     box_color,     static_cast<int32_t>(box_faces.size()));
+        model_renderer.draw(&sphere_vertex_array,  sphere_matrix,  sphere_color,  static_cast<int32_t>(sphere_faces.size()));
+        model_renderer.draw(&capsule_vertex_array, capsule_matrix, capsule_color, static_cast<int32_t>(capsule_faces.size()));
 
         engine::WindowManager::instance().update();
     }
 
-    #pragma region Primitives
+    #pragma region Buffers
 
     plane_index_buffer.destroy();
     plane_vertex_buffer.destroy();
@@ -214,11 +242,12 @@ int32_t main()
     sphere_vertex_buffer.destroy();
     sphere_vertex_array.destroy();
 
-    #pragma endregion
-    #pragma region Uniform Buffers
+    capsule_index_buffer.destroy();
+    capsule_vertex_buffer.destroy();
+    capsule_vertex_array.destroy();
 
-    camera_buffer.destroy();
     material_buffer.destroy();
+    camera_buffer.destroy();
     light_buffer.destroy();
 
     #pragma endregion
