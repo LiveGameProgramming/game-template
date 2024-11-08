@@ -1,9 +1,13 @@
 #include <opengl/commands.hpp>
 #include <opengl/pipeline.hpp>
 
+#include <images/tga_loader.hpp>
+
 #include <data/camera.hpp>
 #include <data/material.hpp>
 #include <data/light.hpp>
+
+#include <vertex/model.hpp>
 
 #include <window_manager.hpp>
 #include <platform_module.hpp>
@@ -157,41 +161,41 @@ int32_t main()
     #pragma endregion
     #pragma region Wood Crate
 
-    constexpr float crate_half_x = 0.5;
-    constexpr float crate_half_y = 0.5;
-    constexpr float crate_half_z = 0.5;
+    constexpr float crate_half_x = 0.5f;
+    constexpr float crate_half_y = 0.5f;
+    constexpr float crate_half_z = 0.5f;
 
-    const std::vector<editor::vertex> crate_vertices
+    const std::vector<engine::vertex::model> crate_vertices
     {
-        { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::front() },
-        { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::front() },
-        { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::front() },
-        { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::front() },
+        { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::front(), { 0.0f, 0.0f } },
+        { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::front(), { 0.0f, 0.0f } },
+        { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::front(), { 0.0f, 0.0f } },
+        { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::front(), { 0.0f, 0.0f } },
 
-        { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::back() },
-        { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::back() },
-        { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::back() },
-        { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::back() },
+        { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::back(), { 0.0f, 0.0f } },
+        { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::back(), { 0.0f, 0.0f } },
+        { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::back(), { 0.0f, 0.0f } },
+        { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::back(), { 0.0f, 0.0f } },
 
-        { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::left() },
-        { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::left() },
-        { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::left() },
-        { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::left() },
+        { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::left(), { 0.0f, 0.0f } },
+        { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::left(), { 0.0f, 0.0f } },
+        { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::left(), { 0.0f, 0.0f } },
+        { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::left(), { 0.0f, 0.0f } },
 
-        { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::right() },
-        { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::right() },
-        { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::right() },
-        { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::right() },
+        { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::right(), { 0.0f, 0.0f } },
+        { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::right(), { 0.0f, 0.0f } },
+        { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::right(), { 0.0f, 0.0f } },
+        { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::right(), { 0.0f, 0.0f } },
 
-        { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::up() },
-        { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::up() },
-        { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::up() },
-        { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::up() },
+        { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::up(), { 0.0f, 0.0f } },
+        { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::up(), { 0.0f, 0.0f } },
+        { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::up(), { 0.0f, 0.0f } },
+        { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::up(), { 0.0f, 0.0f } },
 
-        { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::down() },
-        { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::down() },
-        { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::down() },
-        { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::down() },
+        { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::down(), { 0.0f, 0.0f } },
+        { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::down(), { 0.0f, 0.0f } },
+        { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::down(), { 0.0f, 0.0f } },
+        { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::down(), { 0.0f, 0.0f } },
     };
 
     const std::vector<engine::primitives::triangle> crate_faces
@@ -213,12 +217,19 @@ int32_t main()
     crate_index_buffer.data(engine::buffers::data::create(crate_faces));
 
     engine::opengl::VertexArray crate_vertex_array;
-    crate_vertex_buffer.create();
-    crate_vertex_array.attach_vertices(crate_vertex_buffer, sizeof(editor::vertex));
+    crate_vertex_array.create();
+    crate_vertex_array.attach_vertices(crate_vertex_buffer, sizeof(engine::vertex::model));
     crate_vertex_array.attach_indices(crate_index_buffer);
 
     crate_vertex_array.attribute({ 0, 3, engine::opengl::type_float  });
-    crate_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::vertex, extra) });
+    crate_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(engine::vertex::model, normal) });
+    crate_vertex_array.attribute({ 2, 2, engine::opengl::type_float, offsetof(engine::vertex::model, uv)     });
+
+    #pragma endregion
+
+    #pragma region Textures
+
+    auto [crate_tex_width, crate_tex_height, crate_tex_pixels] = engine::images::TgaLoader::load("wood_crate.tga");
 
     #pragma endregion
 
@@ -305,9 +316,13 @@ int32_t main()
         box_matrix.translate({ -2.0f, 1.0f, 2.0f });
         box_matrix *= box_orientation;
 
+        engine::quat crate_orientation;
+        crate_orientation.rotate({ 1.0f, 0.0f, 0.0f }, engine::Time::total_time() * 45.0f);
+
         engine::mat4 crate_matrix;
         crate_matrix.identity();
         crate_matrix.translate({ -2.0f, 1.0f, -2.0f });
+        crate_matrix *= crate_orientation;
 
         const int32_t width  = engine::WindowManager::instance().width();
         const int32_t height = engine::WindowManager::instance().height();
