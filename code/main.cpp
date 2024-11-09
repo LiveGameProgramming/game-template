@@ -338,7 +338,7 @@ int32_t main()
         model_renderer.draw(&capsule_vertex_array, capsule_matrix, capsule_color, static_cast<int32_t>(capsule_faces.size()));
 
         model_shader.bind();
-        model_shader.push(0, crate_matrix);
+        model_shader.push(crate_matrix);
 
         crate_vertex_array.bind();
         engine::opengl::Commands::draw_indexed(engine::opengl::triangles, static_cast<int32_t>(crate_faces.size()) * engine::primitives::triangle::elements);
