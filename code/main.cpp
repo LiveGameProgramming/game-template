@@ -11,23 +11,23 @@
 #include <image/tga.hpp>
 
 #include <window_manager.hpp>
-#include <platform_module.hpp>
-#include <graphics_module.hpp>
 #include <model_renderer.hpp>
 #include <primitives.hpp>
 #include <functions.hpp>
+#include <graphics.hpp>
+#include <platform.hpp>
 #include <time.hpp>
 #include <file.hpp>
 #include <quat.hpp>
 
 int32_t main()
 {
-    engine::PlatformModule::init();
+    engine::Platform::init();
 
     engine::WindowManager::instance().create({ .size = { 1280, 1024 } }, { });
     engine::WindowManager::instance().open();
 
-    engine::GraphicsModule::init();
+    engine::Graphics::init();
 
     #pragma region Shaders
 
