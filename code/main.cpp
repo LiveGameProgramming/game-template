@@ -1,10 +1,10 @@
 #include <opengl/commands.hpp>
 #include <opengl/pipeline.hpp>
 
-#include <images/tga_loader.hpp>
+#include <image/tga_loader.hpp>
 
-#include <data/camera.hpp>
 #include <data/material.hpp>
+#include <data/camera.hpp>
 #include <data/light.hpp>
 
 #include <vertex/model.hpp>
@@ -229,7 +229,7 @@ int32_t main()
 
     #pragma region Textures
 
-    auto [crate_image_width, crate_image_height, crate_image_pixels] = engine::images::TgaLoader::load("crate.tga");
+    auto [crate_image_width, crate_image_height, crate_image_pixels] = engine::image::TgaLoader::load("crate.tga");
 
     #pragma endregion
 
