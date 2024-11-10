@@ -159,7 +159,7 @@ int32_t main()
     capsule_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::vertex, extra) });
 
     #pragma endregion
-    #pragma region Wood Crate
+    #pragma region Crate
 
     constexpr float crate_half_x = 0.5f;
     constexpr float crate_half_y = 0.5f;
@@ -229,7 +229,7 @@ int32_t main()
 
     #pragma region Textures
 
-    auto [crate_tex_width, crate_tex_height, crate_tex_pixels] = engine::images::TgaLoader::load("wood_crate.tga");
+    auto [crate_tex_width, crate_tex_height, crate_tex_pixels] = engine::images::TgaLoader::load("crate.tga");
 
     #pragma endregion
 
