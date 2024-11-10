@@ -81,11 +81,11 @@ int32_t main()
 
     engine::opengl::Buffer plane_vertex_buffer;
     plane_vertex_buffer.create();
-    plane_vertex_buffer.data(engine::buffers::data::create(plane_vertices));
+    plane_vertex_buffer.data(engine::buffer::data::create(plane_vertices));
 
     engine::opengl::Buffer plane_index_buffer;
     plane_index_buffer.create();
-    plane_index_buffer.data(engine::buffers::data::create(plane_faces));
+    plane_index_buffer.data(engine::buffer::data::create(plane_faces));
 
     engine::opengl::VertexArray plane_vertex_array;
     plane_vertex_array.create();
@@ -102,11 +102,11 @@ int32_t main()
 
     engine::opengl::Buffer box_vertex_buffer;
     box_vertex_buffer.create();
-    box_vertex_buffer.data(engine::buffers::data::create(box_vertices));
+    box_vertex_buffer.data(engine::buffer::data::create(box_vertices));
 
     engine::opengl::Buffer box_index_buffer;
     box_index_buffer.create();
-    box_index_buffer.data(engine::buffers::data::create(box_faces));
+    box_index_buffer.data(engine::buffer::data::create(box_faces));
 
     engine::opengl::VertexArray box_vertex_array;
     box_vertex_array.create();
@@ -123,11 +123,11 @@ int32_t main()
 
     engine::opengl::Buffer sphere_vertex_buffer;
     sphere_vertex_buffer.create();
-    sphere_vertex_buffer.data(engine::buffers::data::create(sphere_vertices));
+    sphere_vertex_buffer.data(engine::buffer::data::create(sphere_vertices));
 
     engine::opengl::Buffer sphere_index_buffer;
     sphere_index_buffer.create();
-    sphere_index_buffer.data(engine::buffers::data::create(sphere_faces));
+    sphere_index_buffer.data(engine::buffer::data::create(sphere_faces));
 
     engine::opengl::VertexArray sphere_vertex_array;
     sphere_vertex_array.create();
@@ -144,11 +144,11 @@ int32_t main()
 
     engine::opengl::Buffer capsule_vertex_buffer;
     capsule_vertex_buffer.create();
-    capsule_vertex_buffer.data(engine::buffers::data::create(capsule_vertices));
+    capsule_vertex_buffer.data(engine::buffer::data::create(capsule_vertices));
 
     engine::opengl::Buffer capsule_index_buffer;
     capsule_index_buffer.create();
-    capsule_index_buffer.data(engine::buffers::data::create(capsule_faces));
+    capsule_index_buffer.data(engine::buffer::data::create(capsule_faces));
 
     engine::opengl::VertexArray capsule_vertex_array;
     capsule_vertex_array.create();
@@ -210,11 +210,11 @@ int32_t main()
 
     engine::opengl::Buffer crate_vertex_buffer;
     crate_vertex_buffer.create();
-    crate_vertex_buffer.data(engine::buffers::data::create(crate_vertices));
+    crate_vertex_buffer.data(engine::buffer::data::create(crate_vertices));
 
     engine::opengl::Buffer crate_index_buffer;
     crate_index_buffer.create();
-    crate_index_buffer.data(engine::buffers::data::create(crate_faces));
+    crate_index_buffer.data(engine::buffer::data::create(crate_faces));
 
     engine::opengl::VertexArray crate_vertex_array;
     crate_vertex_array.create();
@@ -271,17 +271,17 @@ int32_t main()
     engine::opengl::Buffer camera_buffer;
     camera_buffer.create();
     camera_buffer.bind();
-    camera_buffer.data(engine::buffers::data::create(&camera));
+    camera_buffer.data(engine::buffer::data::create(&camera));
 
     engine::opengl::Buffer material_buffer;
     material_buffer.create();
-    material_buffer.bind(engine::buffers::location::material);
-    material_buffer.data(engine::buffers::data::create(&material));
+    material_buffer.bind(engine::buffer::location::material);
+    material_buffer.data(engine::buffer::data::create(&material));
 
     engine::opengl::Buffer light_buffer;
     light_buffer.create();
-    light_buffer.bind(engine::buffers::location::light);
-    light_buffer.data(engine::buffers::data::create(&light));
+    light_buffer.bind(engine::buffer::location::light);
+    light_buffer.data(engine::buffer::data::create(&light));
 
     #pragma endregion
 
@@ -292,7 +292,7 @@ int32_t main()
     engine::WindowManager::instance().resize([&camera_buffer, &camera]
     {
         camera.projection.perspective(60.0f, engine::WindowManager::instance().ratio());
-        camera_buffer.update(engine::buffers::data::create(&camera.projection), offsetof(engine::data::camera, projection));
+        camera_buffer.update(engine::buffer::data::create(&camera.projection), offsetof(engine::data::camera, projection));
     });
 
     while (engine::WindowManager::instance().is_active())
@@ -306,7 +306,7 @@ int32_t main()
         camera_position.z = engine::cos(engine::Time::total_time() * camera_speed) *  camera_radius;
 
         camera.view.look(camera_position, { });
-        camera_buffer.update(engine::buffers::data::create(&camera.view));
+        camera_buffer.update(engine::buffer::data::create(&camera.view));
 
         engine::quat box_orientation;
         box_orientation.rotate({ 0.0f, 1.0f, 0.0f }, engine::Time::total_time() * 90.0f);
