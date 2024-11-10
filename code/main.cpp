@@ -30,7 +30,7 @@ int32_t main()
 
     #pragma region Shaders
 
-    #pragma region Default Shader
+    #pragma region Default
 
     engine::opengl::ShaderStage default_vertex_stage   { engine::opengl::vertex_stage   };
     engine::opengl::ShaderStage default_fragment_stage { engine::opengl::fragment_stage };
@@ -51,13 +51,13 @@ int32_t main()
     default_fragment_stage.destroy();
 
     #pragma endregion
-    #pragma region Model Shader
+    #pragma region Model
 
     engine::opengl::ShaderStage model_vertex_stage   { engine::opengl::vertex_stage   };
     engine::opengl::ShaderStage model_fragment_stage { engine::opengl::fragment_stage };
 
     model_vertex_stage.create();
-    model_vertex_stage.source(engine::File::read("model_shader.vert", std::ios::binary));
+    model_vertex_stage.source(engine::File::read("model_shader.vert",   std::ios::binary));
 
     model_fragment_stage.create();
     model_fragment_stage.source(engine::File::read("model_shader.frag", std::ios::binary));
@@ -229,7 +229,7 @@ int32_t main()
 
     #pragma region Textures
 
-    auto [crate_tex_width, crate_tex_height, crate_tex_pixels] = engine::images::TgaLoader::load("crate.tga");
+    auto [crate_image_width, crate_image_height, crate_image_pixels] = engine::images::TgaLoader::load("crate.tga");
 
     #pragma endregion
 
