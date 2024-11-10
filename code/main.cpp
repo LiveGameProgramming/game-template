@@ -292,7 +292,7 @@ int32_t main()
     engine::WindowManager::instance().resize([&camera_buffer, &camera]
     {
         camera.projection.perspective(60.0f, engine::WindowManager::instance().ratio());
-        camera_buffer.sub_data(engine::buffers::data::create(&camera.projection), offsetof(engine::data::camera, projection));
+        camera_buffer.update(engine::buffers::data::create(&camera.projection), offsetof(engine::data::camera, projection));
     });
 
     while (engine::WindowManager::instance().is_active())
@@ -306,7 +306,7 @@ int32_t main()
         camera_position.z = engine::cos(engine::Time::total_time() * camera_speed) *  camera_radius;
 
         camera.view.look(camera_position, { });
-        camera_buffer.sub_data(engine::buffers::data::create(&camera.view));
+        camera_buffer.update(engine::buffers::data::create(&camera.view));
 
         engine::quat box_orientation;
         box_orientation.rotate({ 0.0f, 1.0f, 0.0f }, engine::Time::total_time() * 90.0f);
