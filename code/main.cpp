@@ -90,11 +90,11 @@ int32_t main()
 
     engine::opengl::VertexArray plane_vertex_array;
     plane_vertex_array.create();
-    plane_vertex_array.attach_vertices(plane_vertex_buffer, sizeof(editor::vertex));
+    plane_vertex_array.attach_vertices(plane_vertex_buffer, sizeof(editor::base::vertex));
     plane_vertex_array.attach_indices(plane_index_buffer);
 
     plane_vertex_array.attribute({ 0, 3, engine::opengl::type_float  });
-    plane_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::vertex, extra) });
+    plane_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::base::vertex, extra) });
 
     #pragma endregion
     #pragma region Box
@@ -111,11 +111,11 @@ int32_t main()
 
     engine::opengl::VertexArray box_vertex_array;
     box_vertex_array.create();
-    box_vertex_array.attach_vertices(box_vertex_buffer, sizeof(editor::vertex));
+    box_vertex_array.attach_vertices(box_vertex_buffer, sizeof(editor::base::vertex));
     box_vertex_array.attach_indices(box_index_buffer);
 
     box_vertex_array.attribute({ 0, 3, engine::opengl::type_float  });
-    box_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::vertex, extra) });
+    box_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::base::vertex, extra) });
 
     #pragma endregion
     #pragma region Sphere
@@ -132,11 +132,11 @@ int32_t main()
 
     engine::opengl::VertexArray sphere_vertex_array;
     sphere_vertex_array.create();
-    sphere_vertex_array.attach_vertices(sphere_vertex_buffer, sizeof(editor::vertex));
+    sphere_vertex_array.attach_vertices(sphere_vertex_buffer, sizeof(editor::base::vertex));
     sphere_vertex_array.attach_indices(sphere_index_buffer);
 
     sphere_vertex_array.attribute({ 0, 3, engine::opengl::type_float  });
-    sphere_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::vertex, extra) });
+    sphere_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::base::vertex, extra) });
 
     #pragma endregion
     #pragma region Capsule
@@ -153,11 +153,11 @@ int32_t main()
 
     engine::opengl::VertexArray capsule_vertex_array;
     capsule_vertex_array.create();
-    capsule_vertex_array.attach_vertices(capsule_vertex_buffer, sizeof(editor::vertex));
+    capsule_vertex_array.attach_vertices(capsule_vertex_buffer, sizeof(editor::base::vertex));
     capsule_vertex_array.attach_indices(capsule_index_buffer);
 
     capsule_vertex_array.attribute({ 0, 3, engine::opengl::type_float  });
-    capsule_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::vertex, extra) });
+    capsule_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::base::vertex, extra) });
 
     #pragma endregion
     #pragma region Crate
