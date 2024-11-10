@@ -198,7 +198,7 @@ int32_t main()
         { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::down(), { 0.0f, 0.0f } },
     };
 
-    const std::vector<engine::primitives::triangle> crate_faces
+    const std::vector<engine::primitive::triangle> crate_faces
     {
         {  0,  1,  2 }, {  2,  3,  0 }, // front face
         {  4,  5,  6 }, {  6,  7,  4 }, //  back face
@@ -341,7 +341,7 @@ int32_t main()
         model_shader.push(crate_matrix);
 
         crate_vertex_array.bind();
-        engine::opengl::Commands::draw_indexed(engine::opengl::triangles, static_cast<int32_t>(crate_faces.size()) * engine::primitives::triangle::elements);
+        engine::opengl::Commands::draw_indexed(engine::opengl::triangles, static_cast<int32_t>(crate_faces.size()) * engine::primitive::triangle::elements);
 
         engine::WindowManager::instance().update();
     }
