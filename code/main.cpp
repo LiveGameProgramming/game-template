@@ -24,7 +24,7 @@ int32_t main()
 {
     engine::Platform::init();
 
-    engine::WindowManager::instance().create({ .size = { 1280, 1024 } }, { });
+    engine::WindowManager::instance().create({ .size = { 2048, 1024 } }, { });
     engine::WindowManager::instance().open();
 
     engine::Graphics::init();
@@ -237,11 +237,14 @@ int32_t main()
     engine::Time time;
     time.init();
 
+    int32_t width  = engine::WindowManager::instance().width() / 2;
+    int32_t height = engine::WindowManager::instance().height();
+
     engine::vec3 camera_position { 0.0f, 2.5, 7.5f };
 
     engine::data::camera camera;
     camera.view.look(camera_position, { });
-    camera.projection.perspective(60.0f, engine::WindowManager::instance().ratio());
+    camera.projection.perspective(60.0f, static_cast<float>(width) / static_cast<float>(height));
 
     engine::data::light light
     {
@@ -292,7 +295,10 @@ int32_t main()
 
     engine::WindowManager::instance().resize([&camera_buffer, &camera]
     {
-        camera.projection.perspective(60.0f, engine::WindowManager::instance().ratio());
+        const int32_t width  = engine::WindowManager::instance().width() / 2;
+        const int32_t height = engine::WindowManager::instance().height();
+
+        camera.projection.perspective(60.0f, static_cast<float>(width) / static_cast<float>(height));
         camera_buffer.update(engine::buffer::data::create(&camera.projection), offsetof(engine::data::camera, projection));
     });
 
@@ -325,11 +331,14 @@ int32_t main()
         crate_matrix.translate({ -2.0f, 1.0f, -2.0f });
         crate_matrix *= crate_orientation;
 
-        const int32_t width  = engine::WindowManager::instance().width();
-        const int32_t height = engine::WindowManager::instance().height();
+        width  = engine::WindowManager::instance().width() / 2;
+        height = engine::WindowManager::instance().height();
+
+        engine::opengl::Commands::clear(engine::opengl::color_buffer | engine::opengl::depth_buffer);
+
+        #pragma region Editor
 
         engine::opengl::Commands::viewport(0, 0, width, height);
-        engine::opengl::Commands::clear(engine::opengl::color_buffer | engine::opengl::depth_buffer);
 
         model_renderer.bind();
 
@@ -337,12 +346,20 @@ int32_t main()
         model_renderer.draw(&box_vertex_array,     box_matrix,     box_color,     static_cast<int32_t>(box_faces.size()));
         model_renderer.draw(&sphere_vertex_array,  sphere_matrix,  sphere_color,  static_cast<int32_t>(sphere_faces.size()));
         model_renderer.draw(&capsule_vertex_array, capsule_matrix, capsule_color, static_cast<int32_t>(capsule_faces.size()));
+        model_renderer.draw(&crate_vertex_array,   crate_matrix,   box_color,     static_cast<int32_t>(crate_faces.size()));
+
+        #pragma endregion
+        #pragma region Engine
+
+        engine::opengl::Commands::viewport(width, 0, width, height);
 
         model_shader.bind();
         model_shader.push(crate_matrix);
 
         crate_vertex_array.bind();
         engine::opengl::Commands::draw_indexed(engine::opengl::triangles, static_cast<int32_t>(crate_faces.size()) * engine::primitive::triangle::elements);
+
+        #pragma endregion
 
         engine::WindowManager::instance().update();
     }
