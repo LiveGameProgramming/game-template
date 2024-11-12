@@ -55,6 +55,27 @@ int32_t main()
     default_fragment_stage.destroy();
 
     #pragma endregion
+    #pragma region UI
+
+    engine::opengl::ShaderStage default_ui_vertex_stage   { engine::opengl::vertex_stage   };
+    engine::opengl::ShaderStage default_ui_fragment_stage { engine::opengl::fragment_stage };
+
+    default_ui_vertex_stage.create();
+    default_ui_vertex_stage.source(engine::File::read("default_ui_shader.vert",   std::ios::binary));
+
+    default_ui_fragment_stage.create();
+    default_ui_fragment_stage.source(engine::File::read("default_ui_shader.frag", std::ios::binary));
+
+    engine::opengl::Shader default_ui_shader;
+    default_ui_shader.create();
+    default_ui_shader.attach(default_ui_vertex_stage);
+    default_ui_shader.attach(default_ui_fragment_stage);
+    default_ui_shader.link();
+
+    default_ui_vertex_stage.destroy();
+    default_ui_fragment_stage.destroy();
+
+    #pragma endregion
     #pragma region Model
 
     engine::opengl::ShaderStage model_vertex_stage   { engine::opengl::vertex_stage   };
@@ -231,6 +252,39 @@ int32_t main()
 
     #pragma endregion
 
+    #pragma region UI
+
+    const std::vector<engine::vertex::ui> ui_vertices
+    {
+        { { -100.0f,  100.0f }, { 0.0f, 0.0f } },
+        { {  100.0f,  100.0f }, { 1.0f, 0.0f } },
+        { {  100.0f, -100.0f }, { 1.0f, 1.0f } },
+        { { -100.0f, -100.0f }, { 0.0f, 1.0f } },
+    };
+
+    const std::vector<engine::primitive::triangle> ui_faces
+    {
+        {  0,  1,  2 }, {  2,  3,  0 } // front face
+    };
+
+    engine::opengl::Buffer ui_vertex_buffer;
+    ui_vertex_buffer.create();
+    ui_vertex_buffer.data(engine::buffer::data::create(ui_vertices));
+
+    engine::opengl::Buffer ui_index_buffer;
+    ui_index_buffer.create();
+    ui_index_buffer.data(engine::buffer::data::create(ui_faces));
+
+    engine::opengl::VertexArray ui_vertex_array;
+    ui_vertex_array.create();
+    ui_vertex_array.attach_vertices(ui_vertex_buffer, sizeof(engine::vertex::ui));
+    ui_vertex_array.attach_indices(ui_index_buffer);
+
+    ui_vertex_array.attribute({ 0, 2, engine::opengl::type_float  });
+    ui_vertex_array.attribute({ 1, 2, engine::opengl::type_float, offsetof(engine::vertex::ui, uv) });
+
+    #pragma endregion
+
     #pragma region Samplers
 
     engine::opengl::Sampler default_sampler;
@@ -388,6 +442,30 @@ int32_t main()
         model_renderer.bind();
 
         model_renderer.draw(& crate_vertex_array, &crate_texture, crate_matrix, static_cast<int32_t>(crate_faces.size()));
+
+        #pragma endregion
+        #pragma region UI
+
+        engine::mat4 ui_model;
+        ui_model.identity();
+        ui_model.translate({ 100, 100, 0 });
+
+        engine::mat4 ui_view;
+        ui_view.identity();
+
+        engine::mat4 ui_projection;
+        ui_projection.orthographic(0, static_cast<float>(width), static_cast<float>(height), 0);
+
+        default_ui_shader.bind();
+        default_ui_shader.push(ui_model);
+        default_ui_shader.push(ui_view,       1);
+        default_ui_shader.push(ui_projection, 2);
+
+        crate_texture.bind();
+
+        ui_vertex_array.bind();
+
+        engine::opengl::Commands::draw_indexed(engine::opengl::triangles, engine::primitive::triangle::elements * static_cast<int32_t>(ui_faces.size()));
 
         #pragma endregion
 
