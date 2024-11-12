@@ -248,10 +248,10 @@ int32_t main()
 
     auto [crate_image_width, crate_image_height, crate_image_pixels] = engine::image::Tga::load("crate.tga");
 
-    engine::opengl::Texture crate_texture { engine::opengl::texture::texture_2d, crate_image_width, crate_image_height };
+    engine::opengl::Texture crate_texture { engine::opengl::texture::texture_2d, engine::opengl::texture::rgb8, crate_image_width, crate_image_height };
 
     crate_texture.create();
-    crate_texture.data  (engine::opengl::texture::rgb8);
+    crate_texture.storage();
     crate_texture.update(engine::opengl::texture::rgb, crate_image_pixels.data());
 
     #pragma endregion
