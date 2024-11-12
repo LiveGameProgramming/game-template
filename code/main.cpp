@@ -1,7 +1,8 @@
 #include <opengl/commands.hpp>
 #include <opengl/pipeline.hpp>
-#include <opengl/texture.hpp>
 #include <opengl/sampler.hpp>
+
+#include <renderer/model.hpp>
 
 #include <data/material.hpp>
 #include <data/camera.hpp>
@@ -311,9 +312,12 @@ int32_t main()
 
     #pragma endregion
 
-    editor::ModelRenderer model_renderer;
-    model_renderer.attach(&default_shader);
-    model_renderer.attach(&material_buffer);
+    editor::ModelRenderer default_model_renderer;
+    default_model_renderer.attach(&default_shader);
+    default_model_renderer.attach(&material_buffer);
+
+    engine::renderer::Model model_renderer;
+    model_renderer.attach(&model_shader);
 
     engine::WindowManager::instance().resize([&camera_buffer, &camera]
     {
@@ -356,32 +360,34 @@ int32_t main()
         width  = engine::WindowManager::instance().width() / 2;
         height = engine::WindowManager::instance().height();
 
-        engine::opengl::Commands::clear(engine::opengl::color_buffer | engine::opengl::depth_buffer);
-
         #pragma region Editor
 
         engine::opengl::Commands::viewport(0, 0, width, height);
 
-        model_renderer.bind();
+        engine::opengl::Commands::clear(1.0f, 0.5f, 0.0f);
+        engine::opengl::Commands::clear(engine::opengl::color_buffer | engine::opengl::depth_buffer);
 
-        model_renderer.draw(&plane_vertex_array,   plane_matrix,   plane_color,   static_cast<int32_t>(plane_faces.size()));
-        model_renderer.draw(&box_vertex_array,     box_matrix,     box_color,     static_cast<int32_t>(box_faces.size()));
-        model_renderer.draw(&sphere_vertex_array,  sphere_matrix,  sphere_color,  static_cast<int32_t>(sphere_faces.size()));
-        model_renderer.draw(&capsule_vertex_array, capsule_matrix, capsule_color, static_cast<int32_t>(capsule_faces.size()));
-        model_renderer.draw(&crate_vertex_array,   crate_matrix,   box_color,     static_cast<int32_t>(crate_faces.size()));
+        default_model_renderer.bind();
+
+        default_model_renderer.draw(&plane_vertex_array,   plane_matrix,   plane_color,   static_cast<int32_t>(plane_faces.size()));
+        default_model_renderer.draw(&box_vertex_array,     box_matrix,     box_color,     static_cast<int32_t>(box_faces.size()));
+        default_model_renderer.draw(&sphere_vertex_array,  sphere_matrix,  sphere_color,  static_cast<int32_t>(sphere_faces.size()));
+        default_model_renderer.draw(&capsule_vertex_array, capsule_matrix, capsule_color, static_cast<int32_t>(capsule_faces.size()));
+        default_model_renderer.draw(&crate_vertex_array,   crate_matrix,   box_color,     static_cast<int32_t>(crate_faces.size()));
 
         #pragma endregion
         #pragma region Engine
 
+        const auto [r, g, b] = engine::rgb::black();
+
         engine::opengl::Commands::viewport(width, 0, width, height);
 
-        model_shader.bind();
-        model_shader.push(crate_matrix);
+        engine::opengl::Commands::clear(r, g, b);
+        //engine::opengl::Commands::clear(engine::opengl::color_buffer | engine::opengl::depth_buffer);
 
-        crate_texture.bind();
+        model_renderer.bind();
 
-        crate_vertex_array.bind();
-        engine::opengl::Commands::draw_indexed(engine::opengl::triangles, static_cast<int32_t>(crate_faces.size()) * engine::primitive::triangle::elements);
+        model_renderer.draw(& crate_vertex_array, &crate_texture, crate_matrix, static_cast<int32_t>(crate_faces.size()));
 
         #pragma endregion
 
