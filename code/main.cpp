@@ -1,5 +1,7 @@
 #include <opengl/commands.hpp>
 #include <opengl/pipeline.hpp>
+#include <opengl/texture.hpp>
+#include <opengl/sampler.hpp>
 
 #include <data/material.hpp>
 #include <data/camera.hpp>
@@ -169,34 +171,34 @@ int32_t main()
     const std::vector<engine::vertex::model> crate_vertices
     {
         { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::front(), { 0.0f, 0.0f } },
-        { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::front(), { 0.0f, 0.0f } },
-        { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::front(), { 0.0f, 0.0f } },
-        { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::front(), { 0.0f, 0.0f } },
+        { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::front(), { 1.0f, 0.0f } },
+        { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::front(), { 1.0f, 1.0f } },
+        { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::front(), { 0.0f, 1.0f } },
 
         { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::back(), { 0.0f, 0.0f } },
-        { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::back(), { 0.0f, 0.0f } },
-        { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::back(), { 0.0f, 0.0f } },
-        { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::back(), { 0.0f, 0.0f } },
+        { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::back(), { 1.0f, 0.0f } },
+        { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::back(), { 1.0f, 1.0f } },
+        { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::back(), { 0.0f, 1.0f } },
 
         { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::left(), { 0.0f, 0.0f } },
-        { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::left(), { 0.0f, 0.0f } },
-        { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::left(), { 0.0f, 0.0f } },
-        { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::left(), { 0.0f, 0.0f } },
+        { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::left(), { 1.0f, 0.0f } },
+        { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::left(), { 1.0f, 1.0f } },
+        { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::left(), { 0.0f, 1.0f } },
 
         { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::right(), { 0.0f, 0.0f } },
-        { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::right(), { 0.0f, 0.0f } },
-        { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::right(), { 0.0f, 0.0f } },
-        { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::right(), { 0.0f, 0.0f } },
+        { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::right(), { 1.0f, 0.0f } },
+        { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::right(), { 1.0f, 1.0f } },
+        { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::right(), { 0.0f, 1.0f } },
 
         { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::up(), { 0.0f, 0.0f } },
-        { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::up(), { 0.0f, 0.0f } },
-        { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::up(), { 0.0f, 0.0f } },
-        { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::up(), { 0.0f, 0.0f } },
+        { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::up(), { 1.0f, 0.0f } },
+        { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::up(), { 1.0f, 1.0f } },
+        { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::up(), { 0.0f, 1.0f } },
 
         { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::down(), { 0.0f, 0.0f } },
-        { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::down(), { 0.0f, 0.0f } },
-        { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::down(), { 0.0f, 0.0f } },
-        { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::down(), { 0.0f, 0.0f } },
+        { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::down(), { 1.0f, 0.0f } },
+        { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::down(), { 1.0f, 1.0f } },
+        { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::down(), { 0.0f, 1.0f } },
     };
 
     const std::vector<engine::primitive::triangle> crate_faces
@@ -228,9 +230,29 @@ int32_t main()
 
     #pragma endregion
 
+    #pragma region Samplers
+
+    engine::opengl::Sampler default_sampler;
+    default_sampler.create();
+    default_sampler.bind();
+
+    default_sampler.parameter(engine::opengl::sampler::wrap_s, engine::opengl::sampler::repeat);
+    default_sampler.parameter(engine::opengl::sampler::wrap_t, engine::opengl::sampler::repeat);
+
+    default_sampler.parameter(engine::opengl::sampler::min_filter, engine::opengl::sampler::linear);
+    default_sampler.parameter(engine::opengl::sampler::mag_filter, engine::opengl::sampler::linear);
+
+    #pragma endregion
+
     #pragma region Textures
 
     auto [crate_image_width, crate_image_height, crate_image_pixels] = engine::image::Tga::load("crate.tga");
+
+    engine::opengl::Texture crate_texture { engine::opengl::texture::texture_2d, crate_image_width, crate_image_height };
+
+    crate_texture.create();
+    crate_texture.data  (engine::opengl::texture::rgb8);
+    crate_texture.update(engine::opengl::texture::rgb, crate_image_pixels.data());
 
     #pragma endregion
 
@@ -356,6 +378,8 @@ int32_t main()
         model_shader.bind();
         model_shader.push(crate_matrix);
 
+        crate_texture.bind();
+
         crate_vertex_array.bind();
         engine::opengl::Commands::draw_indexed(engine::opengl::triangles, static_cast<int32_t>(crate_faces.size()) * engine::primitive::triangle::elements);
 
@@ -397,6 +421,10 @@ int32_t main()
     model_shader.destroy();
 
     #pragma endregion
+
+    crate_texture.destroy();
+
+    default_sampler.destroy();
 
     engine::WindowManager::instance().destroy();
 
