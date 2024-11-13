@@ -19,6 +19,7 @@
 #include <functions.hpp>
 #include <graphics.hpp>
 #include <platform.hpp>
+#include <mesh.hpp>
 #include <time.hpp>
 #include <file.hpp>
 #include <quat.hpp>
@@ -114,8 +115,8 @@ int32_t main()
 
     engine::opengl::VertexArray plane_vertex_array;
     plane_vertex_array.create();
-    plane_vertex_array.attach_vertices(plane_vertex_buffer, sizeof(editor::base::vertex));
-    plane_vertex_array.attach_indices(plane_index_buffer);
+    plane_vertex_array.attach_vertices(&plane_vertex_buffer, sizeof(editor::base::vertex));
+    plane_vertex_array.attach_indices(&plane_index_buffer);
 
     plane_vertex_array.attribute({ 0, 3, engine::opengl::type_float  });
     plane_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::base::vertex, extra) });
@@ -135,8 +136,8 @@ int32_t main()
 
     engine::opengl::VertexArray box_vertex_array;
     box_vertex_array.create();
-    box_vertex_array.attach_vertices(box_vertex_buffer, sizeof(editor::base::vertex));
-    box_vertex_array.attach_indices(box_index_buffer);
+    box_vertex_array.attach_vertices(&box_vertex_buffer, sizeof(editor::base::vertex));
+    box_vertex_array.attach_indices(&box_index_buffer);
 
     box_vertex_array.attribute({ 0, 3, engine::opengl::type_float  });
     box_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::base::vertex, extra) });
@@ -156,8 +157,8 @@ int32_t main()
 
     engine::opengl::VertexArray sphere_vertex_array;
     sphere_vertex_array.create();
-    sphere_vertex_array.attach_vertices(sphere_vertex_buffer, sizeof(editor::base::vertex));
-    sphere_vertex_array.attach_indices(sphere_index_buffer);
+    sphere_vertex_array.attach_vertices(&sphere_vertex_buffer, sizeof(editor::base::vertex));
+    sphere_vertex_array.attach_indices(&sphere_index_buffer);
 
     sphere_vertex_array.attribute({ 0, 3, engine::opengl::type_float  });
     sphere_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::base::vertex, extra) });
@@ -177,8 +178,8 @@ int32_t main()
 
     engine::opengl::VertexArray capsule_vertex_array;
     capsule_vertex_array.create();
-    capsule_vertex_array.attach_vertices(capsule_vertex_buffer, sizeof(editor::base::vertex));
-    capsule_vertex_array.attach_indices(capsule_index_buffer);
+    capsule_vertex_array.attach_vertices(&capsule_vertex_buffer, sizeof(editor::base::vertex));
+    capsule_vertex_array.attach_indices(&capsule_index_buffer);
 
     capsule_vertex_array.attribute({ 0, 3, engine::opengl::type_float  });
     capsule_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::base::vertex, extra) });
@@ -243,8 +244,8 @@ int32_t main()
 
     engine::opengl::VertexArray crate_vertex_array;
     crate_vertex_array.create();
-    crate_vertex_array.attach_vertices(crate_vertex_buffer, sizeof(engine::vertex::model));
-    crate_vertex_array.attach_indices(crate_index_buffer);
+    crate_vertex_array.attach_vertices(&crate_vertex_buffer, sizeof(engine::vertex::model));
+    crate_vertex_array.attach_indices(&crate_index_buffer);
 
     crate_vertex_array.attribute({ 0, 3, engine::opengl::type_float  });
     crate_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(engine::vertex::model, normal) });
@@ -254,34 +255,30 @@ int32_t main()
 
     #pragma region UI
 
-    const std::vector<engine::vertex::ui> ui_vertices
+    engine::base::geometry<engine::vertex::ui, engine::primitive::triangle> ui_geometry
     {
-        { { -100.0f,  100.0f }, { 0.0f, 0.0f } },
-        { {  100.0f,  100.0f }, { 1.0f, 0.0f } },
-        { {  100.0f, -100.0f }, { 1.0f, 1.0f } },
-        { { -100.0f, -100.0f }, { 0.0f, 1.0f } },
+        {
+            { { -100.0f,  100.0f }, { 0.0f, 0.0f } },
+            { {  100.0f,  100.0f }, { 1.0f, 0.0f } },
+            { {  100.0f, -100.0f }, { 1.0f, 1.0f } },
+            { { -100.0f, -100.0f }, { 0.0f, 1.0f } },
+        },
+        {
+            {  0,  1,  2 }, {  2,  3,  0 } // front face
+        }
     };
 
-    const std::vector<engine::primitive::triangle> ui_faces
+    const std::vector<engine::vertex::attribute> ui_attributes
     {
-        {  0,  1,  2 }, {  2,  3,  0 } // front face
+        { 0, 2, engine::opengl::type_float  },
+        { 1, 2, engine::opengl::type_float, offsetof(engine::vertex::ui, uv) }
     };
 
-    engine::opengl::Buffer ui_vertex_buffer;
-    ui_vertex_buffer.create();
-    ui_vertex_buffer.data(engine::buffer::data::create(ui_vertices));
+    engine::Mesh ui_mesh { engine::opengl::triangles };
+    ui_mesh.create(sizeof(engine::vertex::ui));
+    ui_mesh.attributes(ui_attributes);
 
-    engine::opengl::Buffer ui_index_buffer;
-    ui_index_buffer.create();
-    ui_index_buffer.data(engine::buffer::data::create(ui_faces));
-
-    engine::opengl::VertexArray ui_vertex_array;
-    ui_vertex_array.create();
-    ui_vertex_array.attach_vertices(ui_vertex_buffer, sizeof(engine::vertex::ui));
-    ui_vertex_array.attach_indices(ui_index_buffer);
-
-    ui_vertex_array.attribute({ 0, 2, engine::opengl::type_float  });
-    ui_vertex_array.attribute({ 1, 2, engine::opengl::type_float, offsetof(engine::vertex::ui, uv) });
+    ui_mesh.update(ui_geometry);
 
     #pragma endregion
 
@@ -463,9 +460,9 @@ int32_t main()
 
         crate_texture.bind();
 
-        ui_vertex_array.bind();
+        ui_mesh.bind();
 
-        engine::opengl::Commands::draw_indexed(engine::opengl::triangles, engine::primitive::triangle::elements * static_cast<int32_t>(ui_faces.size()));
+        engine::opengl::Commands::draw_indexed(engine::opengl::triangles, engine::primitive::triangle::elements * ui_mesh.faces());
 
         #pragma endregion
 
@@ -473,6 +470,8 @@ int32_t main()
     }
 
     #pragma region Buffers
+
+    ui_mesh.destroy();
 
     plane_index_buffer.destroy();
     plane_vertex_buffer.destroy();
