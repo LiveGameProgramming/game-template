@@ -275,6 +275,7 @@ int32_t main()
     };
 
     engine::Mesh ui_mesh { engine::opengl::triangles };
+
     ui_mesh.create(sizeof(engine::vertex::ui));
     ui_mesh.attributes(ui_attributes);
 
