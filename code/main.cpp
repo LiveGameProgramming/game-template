@@ -373,7 +373,7 @@ int32_t main()
     engine::renderer::Model model_renderer;
     model_renderer.attach(&model_shader);
 
-    engine::WindowManager::instance().resize([&camera_buffer, &camera]
+    engine::WindowManager::instance().set_resize_callback([&camera_buffer, &camera]
     {
         const int32_t width  = engine::WindowManager::instance().width() / 2;
         const int32_t height = engine::WindowManager::instance().height();
@@ -441,7 +441,7 @@ int32_t main()
 
         model_renderer.bind();
 
-        model_renderer.draw(& crate_vertex_array, &crate_texture, crate_matrix, static_cast<int32_t>(crate_faces.size()));
+        model_renderer.draw(&crate_vertex_array, &crate_texture, crate_matrix, static_cast<int32_t>(crate_faces.size()));
 
         #pragma endregion
         #pragma region UI
