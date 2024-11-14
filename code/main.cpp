@@ -37,8 +37,8 @@ int32_t main()
 
     #pragma region Default
 
-    engine::opengl::ShaderStage default_vertex_stage   { engine::opengl::vertex_stage   };
-    engine::opengl::ShaderStage default_fragment_stage { engine::opengl::fragment_stage };
+    engine::opengl::ShaderStage default_vertex_stage   { engine::opengl::shader::vertex   };
+    engine::opengl::ShaderStage default_fragment_stage { engine::opengl::shader::fragment };
 
     default_vertex_stage.create();
     default_vertex_stage.source(engine::File::read("default_shader.vert",   std::ios::binary));
@@ -58,8 +58,8 @@ int32_t main()
     #pragma endregion
     #pragma region UI
 
-    engine::opengl::ShaderStage default_ui_vertex_stage   { engine::opengl::vertex_stage   };
-    engine::opengl::ShaderStage default_ui_fragment_stage { engine::opengl::fragment_stage };
+    engine::opengl::ShaderStage default_ui_vertex_stage   { engine::opengl::shader::vertex   };
+    engine::opengl::ShaderStage default_ui_fragment_stage { engine::opengl::shader::fragment };
 
     default_ui_vertex_stage.create();
     default_ui_vertex_stage.source(engine::File::read("default_ui_shader.vert",   std::ios::binary));
@@ -79,8 +79,8 @@ int32_t main()
     #pragma endregion
     #pragma region Model
 
-    engine::opengl::ShaderStage model_vertex_stage   { engine::opengl::vertex_stage   };
-    engine::opengl::ShaderStage model_fragment_stage { engine::opengl::fragment_stage };
+    engine::opengl::ShaderStage model_vertex_stage   { engine::opengl::shader::vertex   };
+    engine::opengl::ShaderStage model_fragment_stage { engine::opengl::shader::fragment };
 
     model_vertex_stage.create();
     model_vertex_stage.source(engine::File::read("model_shader.vert",   std::ios::binary));
@@ -371,7 +371,7 @@ int32_t main()
     engine::renderer::Model model_renderer;
     model_renderer.attach(&model_shader);
 
-    engine::WindowManager::instance().set_resize_callback([&camera_buffer, &camera]
+    engine::WindowManager::instance().resize_callback([&camera_buffer, &camera]
     {
         const int32_t width  = engine::WindowManager::instance().width() / 2;
         const int32_t height = engine::WindowManager::instance().height();
