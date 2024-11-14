@@ -252,7 +252,6 @@ int32_t main()
     crate_vertex_array.attribute({ 2, 2, engine::opengl::type_float, offsetof(engine::vertex::model, uv)     });
 
     #pragma endregion
-
     #pragma region UI
 
     engine::base::geometry<engine::vertex::ui, engine::primitive::triangle> ui_geometry
