@@ -1,3 +1,5 @@
+#include <tools/shader_converter.hpp>
+
 #include <opengl/commands.hpp>
 #include <opengl/pipeline.hpp>
 #include <opengl/sampler.hpp>
@@ -26,6 +28,12 @@
 
 int32_t main()
 {
+    const std::string assets_folder = "../assets/";
+
+    editor::tools::ShaderConverter::convert("default_shader",    assets_folder);
+    editor::tools::ShaderConverter::convert("default_ui_shader", assets_folder);
+    editor::tools::ShaderConverter::convert("model_shader",      assets_folder);
+
     engine::Platform::init();
 
     engine::WindowManager::instance().create({ .size = { 2048, 1024 } }, { });
