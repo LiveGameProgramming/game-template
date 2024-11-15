@@ -1,4 +1,5 @@
 #include <tools/primitive_generator.hpp>
+#include <tools/sprite_generator.hpp>
 #include <tools/shader_converter.hpp>
 
 #include <opengl/commands.hpp>
@@ -106,8 +107,9 @@ int32_t main()
 
     #pragma endregion
 
-    constexpr auto debug_vertex_size = sizeof(editor::vertex::debug);
-    constexpr auto model_vertex_size = sizeof(engine::vertex::model);
+    constexpr auto  debug_vertex_size = sizeof(editor::vertex::debug);
+    constexpr auto  model_vertex_size = sizeof(engine::vertex::model);
+    constexpr auto sprite_vertex_size = sizeof(engine::vertex::sprite);
 
     const std::vector<engine::vertex::attribute> debug_vertex_attributes
     {
@@ -120,6 +122,12 @@ int32_t main()
         { 0, 3, engine::opengl::type_float  },
         { 1, 3, engine::opengl::type_float, offsetof(engine::vertex::model, normal) },
         { 2, 2, engine::opengl::type_float, offsetof(engine::vertex::model, uv)     }
+    };
+
+    const std::vector<engine::vertex::attribute> sprite_vertex_attributes
+    {
+        { 0, 2, engine::opengl::type_float  },
+        { 1, 2, engine::opengl::type_float, offsetof(engine::vertex::sprite, uv) }
     };
 
     engine::Mesh plane_mesh;
@@ -197,32 +205,14 @@ int32_t main()
     crate_mesh.attributes(model_vertex_attributes);
 
     #pragma endregion
-    #pragma region UI
+    #pragma region Sprites
 
-    engine::base::geometry<engine::vertex::sprite, engine::primitive::triangle> ui_geometry
-    {
-        {
-            { { -100.0f,  100.0f }, { 0.0f, 0.0f } },
-            { {  100.0f,  100.0f }, { 1.0f, 0.0f } },
-            { {  100.0f, -100.0f }, { 1.0f, 1.0f } },
-            { { -100.0f, -100.0f }, { 0.0f, 1.0f } },
-        },
-        {
-            {  0,  1,  2 }, {  2,  3,  0 } // front face
-        }
-    };
+    auto sprite_geometry = engine::tools::SpriteGenerator::create({ { }, { 200.0f, 200.0f } });
 
-    const std::vector<engine::vertex::attribute> ui_attributes
-    {
-        { 0, 2, engine::opengl::type_float  },
-        { 1, 2, engine::opengl::type_float, offsetof(engine::vertex::sprite, uv) }
-    };
-
-    engine::Mesh ui_mesh;
-
-    ui_mesh.create(sizeof(engine::vertex::sprite));
-    ui_mesh.update(ui_geometry);
-    ui_mesh.attributes(ui_attributes);
+    engine::Mesh sprite_mesh;
+    sprite_mesh.create(sprite_vertex_size);
+    sprite_mesh.update(sprite_geometry);
+    sprite_mesh.attributes(sprite_vertex_attributes);
 
     #pragma endregion
 
@@ -388,9 +378,8 @@ int32_t main()
         #pragma endregion
         #pragma region UI
 
-        engine::mat4 ui_model;
-        ui_model.identity();
-        ui_model.translate({ 100, 100, 0 });
+        engine::mat4 sprite_model;
+        sprite_model.identity();
 
         engine::mat4 ui_view;
         ui_view.identity();
@@ -399,15 +388,15 @@ int32_t main()
         ui_projection.orthographic(0, static_cast<float>(width), static_cast<float>(height), 0);
 
         default_ui_shader.bind();
-        default_ui_shader.push(ui_model);
+        default_ui_shader.push(sprite_model);
         default_ui_shader.push(ui_view,       1);
         default_ui_shader.push(ui_projection, 2);
 
         crate_texture.bind();
 
-        ui_mesh.bind();
+        sprite_mesh.bind();
 
-        engine::opengl::Commands::draw_indexed(engine::opengl::triangles, engine::primitive::triangle::elements * ui_mesh.faces());
+        engine::opengl::Commands::draw_indexed(engine::opengl::triangles, engine::primitive::triangle::elements * sprite_mesh.faces());
 
         #pragma endregion
 
@@ -422,7 +411,7 @@ int32_t main()
     capsule_mesh.destroy();
     crate_mesh.destroy();
 
-    ui_mesh.destroy();
+    sprite_mesh.destroy();
 
     #pragma endregion
     #pragma region Buffers
