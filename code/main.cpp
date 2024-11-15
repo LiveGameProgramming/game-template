@@ -30,9 +30,9 @@ int32_t main()
 {
     const std::string assets_folder = "../assets/";
 
-    editor::tools::ShaderConverter::convert("default_shader",    assets_folder);
-    editor::tools::ShaderConverter::convert("default_ui_shader", assets_folder);
-    editor::tools::ShaderConverter::convert("model_shader",      assets_folder);
+    //editor::tools::ShaderConverter::convert("default_base_shader",   assets_folder);
+    //editor::tools::ShaderConverter::convert("default_model_shader",  assets_folder);
+    //editor::tools::ShaderConverter::convert("default_sprite_shader", assets_folder);
 
     engine::Platform::init();
 
@@ -49,10 +49,10 @@ int32_t main()
     engine::opengl::ShaderStage default_fragment_stage { engine::opengl::shader::fragment };
 
     default_vertex_stage.create();
-    default_vertex_stage.source(engine::File::read("default_shader.vert",   std::ios::binary));
+    default_vertex_stage.source(engine::File::read("default_base_shader.vert",   std::ios::binary));
 
     default_fragment_stage.create();
-    default_fragment_stage.source(engine::File::read("default_shader.frag", std::ios::binary));
+    default_fragment_stage.source(engine::File::read("default_base_shader.frag", std::ios::binary));
 
     engine::opengl::Shader default_shader;
     default_shader.create();
@@ -70,10 +70,10 @@ int32_t main()
     engine::opengl::ShaderStage default_ui_fragment_stage { engine::opengl::shader::fragment };
 
     default_ui_vertex_stage.create();
-    default_ui_vertex_stage.source(engine::File::read("default_ui_shader.vert",   std::ios::binary));
+    default_ui_vertex_stage.source(engine::File::read("default_sprite_shader.vert",   std::ios::binary));
 
     default_ui_fragment_stage.create();
-    default_ui_fragment_stage.source(engine::File::read("default_ui_shader.frag", std::ios::binary));
+    default_ui_fragment_stage.source(engine::File::read("default_sprite_shader.frag", std::ios::binary));
 
     engine::opengl::Shader default_ui_shader;
     default_ui_shader.create();
@@ -91,10 +91,10 @@ int32_t main()
     engine::opengl::ShaderStage model_fragment_stage { engine::opengl::shader::fragment };
 
     model_vertex_stage.create();
-    model_vertex_stage.source(engine::File::read("model_shader.vert",   std::ios::binary));
+    model_vertex_stage.source(engine::File::read("default_model_shader.vert",   std::ios::binary));
 
     model_fragment_stage.create();
-    model_fragment_stage.source(engine::File::read("model_shader.frag", std::ios::binary));
+    model_fragment_stage.source(engine::File::read("default_model_shader.frag", std::ios::binary));
 
     engine::opengl::Shader model_shader;
     model_shader.create();
