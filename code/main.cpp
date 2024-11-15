@@ -1,3 +1,4 @@
+#include <tools/primitive_generator.hpp>
 #include <tools/shader_converter.hpp>
 
 #include <opengl/commands.hpp>
@@ -16,7 +17,6 @@
 #include <image/tga.hpp>
 
 #include <window_manager.hpp>
-#include <primitives.hpp>
 #include <functions.hpp>
 #include <graphics.hpp>
 #include <platform.hpp>
@@ -124,22 +124,22 @@ int32_t main()
 
     engine::Mesh plane_mesh;
     plane_mesh.create(debug_vertex_size);
-    plane_mesh.update(editor::Primitives::create_plane(10.0f, 10.0f));
+    plane_mesh.update(editor::tools::PrimitiveGenerator::create_plane(10.0f, 10.0f));
     plane_mesh.attributes(debug_vertex_attributes);
 
     engine::Mesh box_mesh;
     box_mesh.create(debug_vertex_size);
-    box_mesh.update(editor::Primitives::create_box());
+    box_mesh.update(editor::tools::PrimitiveGenerator::create_box());
     box_mesh.attributes(debug_vertex_attributes);
 
     engine::Mesh sphere_mesh;
     sphere_mesh.create(debug_vertex_size);
-    sphere_mesh.update(editor::Primitives::create_sphere());
+    sphere_mesh.update(editor::tools::PrimitiveGenerator::create_sphere());
     sphere_mesh.attributes(debug_vertex_attributes);
 
     engine::Mesh capsule_mesh;
     capsule_mesh.create(debug_vertex_size);
-    capsule_mesh.update(editor::Primitives::create_capsule());
+    capsule_mesh.update(editor::tools::PrimitiveGenerator::create_capsule());
     capsule_mesh.attributes(debug_vertex_attributes);
 
     #pragma region Crate
