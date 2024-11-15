@@ -106,6 +106,7 @@ int32_t main()
     #pragma endregion
 
     #pragma endregion
+    #pragma region Meshes
 
     constexpr auto  debug_vertex_size = sizeof(editor::vertex::debug);
     constexpr auto  model_vertex_size = sizeof(engine::vertex::model);
@@ -130,26 +131,27 @@ int32_t main()
         { 1, 2, engine::opengl::type_float, offsetof(engine::vertex::sprite, uv) }
     };
 
-    engine::Mesh plane_mesh;
+    engine::core::Mesh plane_mesh;
     plane_mesh.create(debug_vertex_size);
     plane_mesh.update(editor::tools::PrimitiveGenerator::create_plane(10.0f, 10.0f));
     plane_mesh.attributes(debug_vertex_attributes);
 
-    engine::Mesh box_mesh;
+    engine::core::Mesh box_mesh;
     box_mesh.create(debug_vertex_size);
     box_mesh.update(editor::tools::PrimitiveGenerator::create_box());
     box_mesh.attributes(debug_vertex_attributes);
 
-    engine::Mesh sphere_mesh;
+    engine::core::Mesh sphere_mesh;
     sphere_mesh.create(debug_vertex_size);
     sphere_mesh.update(editor::tools::PrimitiveGenerator::create_sphere());
     sphere_mesh.attributes(debug_vertex_attributes);
 
-    engine::Mesh capsule_mesh;
+    engine::core::Mesh capsule_mesh;
     capsule_mesh.create(debug_vertex_size);
     capsule_mesh.update(editor::tools::PrimitiveGenerator::create_capsule());
     capsule_mesh.attributes(debug_vertex_attributes);
 
+    #pragma endregion
     #pragma region Crate
 
     constexpr float crate_half_x = 0.5f;
@@ -199,7 +201,7 @@ int32_t main()
         }
     };
 
-    engine::Mesh crate_mesh;
+    engine::core::Mesh crate_mesh;
     crate_mesh.create(model_vertex_size);
     crate_mesh.update(crate_geometry);
     crate_mesh.attributes(model_vertex_attributes);
@@ -209,13 +211,12 @@ int32_t main()
 
     auto sprite_geometry = engine::tools::SpriteGenerator::create({ { }, { 200.0f, 200.0f } });
 
-    engine::Mesh sprite_mesh;
+    engine::core::Mesh sprite_mesh;
     sprite_mesh.create(sprite_vertex_size);
     sprite_mesh.update(sprite_geometry);
     sprite_mesh.attributes(sprite_vertex_attributes);
 
     #pragma endregion
-
     #pragma region Samplers
 
     engine::opengl::Sampler default_sampler;
@@ -229,7 +230,6 @@ int32_t main()
     default_sampler.parameter(engine::opengl::sampler::mag_filter, engine::opengl::sampler::linear);
 
     #pragma endregion
-
     #pragma region Textures
 
     auto [crate_image_width, crate_image_height, crate_image_pixels] = engine::image::Tga::load("crate.tga");
