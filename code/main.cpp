@@ -11,28 +11,25 @@
 #include <data/light.hpp>
 
 #include <vertex/model.hpp>
-#include <vertex/ui.hpp>
+#include <vertex/sprite.hpp>
 
 #include <image/tga.hpp>
 
 #include <window_manager.hpp>
-#include <model_renderer.hpp>
 #include <primitives.hpp>
 #include <functions.hpp>
 #include <graphics.hpp>
 #include <platform.hpp>
-#include <mesh.hpp>
 #include <time.hpp>
 #include <file.hpp>
-#include <quat.hpp>
 
 int32_t main()
 {
     const std::string assets_folder = "../assets/";
 
-    //editor::tools::ShaderConverter::convert("default_base_shader",   assets_folder);
-    //editor::tools::ShaderConverter::convert("default_model_shader",  assets_folder);
-    //editor::tools::ShaderConverter::convert("default_sprite_shader", assets_folder);
+    editor::tools::ShaderConverter::convert("default_base_shader",   assets_folder);
+    editor::tools::ShaderConverter::convert("default_model_shader",  assets_folder);
+    editor::tools::ShaderConverter::convert("default_sprite_shader", assets_folder);
 
     engine::Platform::init();
 
@@ -109,160 +106,100 @@ int32_t main()
 
     #pragma endregion
 
-    #pragma region Plane
+    constexpr auto debug_vertex_size = sizeof(editor::vertex::debug);
+    constexpr auto model_vertex_size = sizeof(engine::vertex::model);
 
-    auto [plane_vertices, plane_faces] = editor::Primitives::create_plane(10.0f, 10.0f);
+    const std::vector<engine::vertex::attribute> debug_vertex_attributes
+    {
+        { 0, 3, engine::opengl::type_float  },
+        { 1, 3, engine::opengl::type_float, offsetof(editor::vertex::debug, extra) }
+    };
 
-    engine::opengl::Buffer plane_vertex_buffer;
-    plane_vertex_buffer.create();
-    plane_vertex_buffer.data(engine::buffer::data::create(plane_vertices));
+    const std::vector<engine::vertex::attribute> model_vertex_attributes
+    {
+        { 0, 3, engine::opengl::type_float  },
+        { 1, 3, engine::opengl::type_float, offsetof(engine::vertex::model, normal) },
+        { 2, 2, engine::opengl::type_float, offsetof(engine::vertex::model, uv)     }
+    };
 
-    engine::opengl::Buffer plane_index_buffer;
-    plane_index_buffer.create();
-    plane_index_buffer.data(engine::buffer::data::create(plane_faces));
+    engine::Mesh plane_mesh;
+    plane_mesh.create(debug_vertex_size);
+    plane_mesh.update(editor::Primitives::create_plane(10.0f, 10.0f));
+    plane_mesh.attributes(debug_vertex_attributes);
 
-    engine::opengl::VertexArray plane_vertex_array;
-    plane_vertex_array.create();
-    plane_vertex_array.attach_vertices(&plane_vertex_buffer, sizeof(editor::base::vertex));
-    plane_vertex_array.attach_indices(&plane_index_buffer);
+    engine::Mesh box_mesh;
+    box_mesh.create(debug_vertex_size);
+    box_mesh.update(editor::Primitives::create_box());
+    box_mesh.attributes(debug_vertex_attributes);
 
-    plane_vertex_array.attribute({ 0, 3, engine::opengl::type_float  });
-    plane_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::base::vertex, extra) });
+    engine::Mesh sphere_mesh;
+    sphere_mesh.create(debug_vertex_size);
+    sphere_mesh.update(editor::Primitives::create_sphere());
+    sphere_mesh.attributes(debug_vertex_attributes);
 
-    #pragma endregion
-    #pragma region Box
+    engine::Mesh capsule_mesh;
+    capsule_mesh.create(debug_vertex_size);
+    capsule_mesh.update(editor::Primitives::create_capsule());
+    capsule_mesh.attributes(debug_vertex_attributes);
 
-    auto [box_vertices, box_faces] = editor::Primitives::create_box();
-
-    engine::opengl::Buffer box_vertex_buffer;
-    box_vertex_buffer.create();
-    box_vertex_buffer.data(engine::buffer::data::create(box_vertices));
-
-    engine::opengl::Buffer box_index_buffer;
-    box_index_buffer.create();
-    box_index_buffer.data(engine::buffer::data::create(box_faces));
-
-    engine::opengl::VertexArray box_vertex_array;
-    box_vertex_array.create();
-    box_vertex_array.attach_vertices(&box_vertex_buffer, sizeof(editor::base::vertex));
-    box_vertex_array.attach_indices(&box_index_buffer);
-
-    box_vertex_array.attribute({ 0, 3, engine::opengl::type_float  });
-    box_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::base::vertex, extra) });
-
-    #pragma endregion
-    #pragma region Sphere
-
-    auto [sphere_vertices, sphere_faces] = editor::Primitives::create_sphere();
-
-    engine::opengl::Buffer sphere_vertex_buffer;
-    sphere_vertex_buffer.create();
-    sphere_vertex_buffer.data(engine::buffer::data::create(sphere_vertices));
-
-    engine::opengl::Buffer sphere_index_buffer;
-    sphere_index_buffer.create();
-    sphere_index_buffer.data(engine::buffer::data::create(sphere_faces));
-
-    engine::opengl::VertexArray sphere_vertex_array;
-    sphere_vertex_array.create();
-    sphere_vertex_array.attach_vertices(&sphere_vertex_buffer, sizeof(editor::base::vertex));
-    sphere_vertex_array.attach_indices(&sphere_index_buffer);
-
-    sphere_vertex_array.attribute({ 0, 3, engine::opengl::type_float  });
-    sphere_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::base::vertex, extra) });
-
-    #pragma endregion
-    #pragma region Capsule
-
-    auto [capsule_vertices, capsule_faces] = editor::Primitives::create_capsule();
-
-    engine::opengl::Buffer capsule_vertex_buffer;
-    capsule_vertex_buffer.create();
-    capsule_vertex_buffer.data(engine::buffer::data::create(capsule_vertices));
-
-    engine::opengl::Buffer capsule_index_buffer;
-    capsule_index_buffer.create();
-    capsule_index_buffer.data(engine::buffer::data::create(capsule_faces));
-
-    engine::opengl::VertexArray capsule_vertex_array;
-    capsule_vertex_array.create();
-    capsule_vertex_array.attach_vertices(&capsule_vertex_buffer, sizeof(editor::base::vertex));
-    capsule_vertex_array.attach_indices(&capsule_index_buffer);
-
-    capsule_vertex_array.attribute({ 0, 3, engine::opengl::type_float  });
-    capsule_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(editor::base::vertex, extra) });
-
-    #pragma endregion
     #pragma region Crate
 
     constexpr float crate_half_x = 0.5f;
     constexpr float crate_half_y = 0.5f;
     constexpr float crate_half_z = 0.5f;
 
-    const std::vector<engine::vertex::model> crate_vertices
+    const engine::base::geometry<engine::vertex::model, engine::primitive::triangle> crate_geometry
     {
-        { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::front(), { 0.0f, 0.0f } },
-        { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::front(), { 1.0f, 0.0f } },
-        { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::front(), { 1.0f, 1.0f } },
-        { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::front(), { 0.0f, 1.0f } },
+        {
+            { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::front(), { 0.0f, 0.0f } },
+            { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::front(), { 1.0f, 0.0f } },
+            { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::front(), { 1.0f, 1.0f } },
+            { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::front(), { 0.0f, 1.0f } },
 
-        { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::back(), { 0.0f, 0.0f } },
-        { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::back(), { 1.0f, 0.0f } },
-        { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::back(), { 1.0f, 1.0f } },
-        { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::back(), { 0.0f, 1.0f } },
+            { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::back(), { 0.0f, 0.0f } },
+            { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::back(), { 1.0f, 0.0f } },
+            { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::back(), { 1.0f, 1.0f } },
+            { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::back(), { 0.0f, 1.0f } },
 
-        { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::left(), { 0.0f, 0.0f } },
-        { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::left(), { 1.0f, 0.0f } },
-        { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::left(), { 1.0f, 1.0f } },
-        { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::left(), { 0.0f, 1.0f } },
+            { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::left(), { 0.0f, 0.0f } },
+            { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::left(), { 1.0f, 0.0f } },
+            { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::left(), { 1.0f, 1.0f } },
+            { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::left(), { 0.0f, 1.0f } },
 
-        { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::right(), { 0.0f, 0.0f } },
-        { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::right(), { 1.0f, 0.0f } },
-        { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::right(), { 1.0f, 1.0f } },
-        { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::right(), { 0.0f, 1.0f } },
+            { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::right(), { 0.0f, 0.0f } },
+            { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::right(), { 1.0f, 0.0f } },
+            { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::right(), { 1.0f, 1.0f } },
+            { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::right(), { 0.0f, 1.0f } },
 
-        { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::up(), { 0.0f, 0.0f } },
-        { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::up(), { 1.0f, 0.0f } },
-        { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::up(), { 1.0f, 1.0f } },
-        { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::up(), { 0.0f, 1.0f } },
+            { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::up(), { 0.0f, 0.0f } },
+            { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::up(), { 1.0f, 0.0f } },
+            { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::up(), { 1.0f, 1.0f } },
+            { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::up(), { 0.0f, 1.0f } },
 
-        { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::down(), { 0.0f, 0.0f } },
-        { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::down(), { 1.0f, 0.0f } },
-        { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::down(), { 1.0f, 1.0f } },
-        { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::down(), { 0.0f, 1.0f } },
+            { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::down(), { 0.0f, 0.0f } },
+            { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::down(), { 1.0f, 0.0f } },
+            { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::down(), { 1.0f, 1.0f } },
+            { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::down(), { 0.0f, 1.0f } },
+        },
+        {
+            {  0,  1,  2 }, {  2,  3,  0 }, // front face
+            {  4,  5,  6 }, {  6,  7,  4 }, //  back face
+            {  8,  9, 10 }, { 10, 11,  8 }, //  left face
+            { 12, 13, 14 }, { 14, 15, 12 }, // right face
+            { 16, 17, 18 }, { 18, 19, 16 }, //    up face
+            { 20, 21, 22 }, { 22, 23, 20 }  //  down face
+        }
     };
 
-    const std::vector<engine::primitive::triangle> crate_faces
-    {
-        {  0,  1,  2 }, {  2,  3,  0 }, // front face
-        {  4,  5,  6 }, {  6,  7,  4 }, //  back face
-        {  8,  9, 10 }, { 10, 11,  8 }, //  left face
-        { 12, 13, 14 }, { 14, 15, 12 }, // right face
-        { 16, 17, 18 }, { 18, 19, 16 }, //    up face
-        { 20, 21, 22 }, { 22, 23, 20 }  //  down face
-    };
-
-    engine::opengl::Buffer crate_vertex_buffer;
-    crate_vertex_buffer.create();
-    crate_vertex_buffer.data(engine::buffer::data::create(crate_vertices));
-
-    engine::opengl::Buffer crate_index_buffer;
-    crate_index_buffer.create();
-    crate_index_buffer.data(engine::buffer::data::create(crate_faces));
-
-    engine::opengl::VertexArray crate_vertex_array;
-    crate_vertex_array.create();
-    crate_vertex_array.attach_vertices(&crate_vertex_buffer, sizeof(engine::vertex::model));
-    crate_vertex_array.attach_indices(&crate_index_buffer);
-
-    crate_vertex_array.attribute({ 0, 3, engine::opengl::type_float  });
-    crate_vertex_array.attribute({ 1, 3, engine::opengl::type_float, offsetof(engine::vertex::model, normal) });
-    crate_vertex_array.attribute({ 2, 2, engine::opengl::type_float, offsetof(engine::vertex::model, uv)     });
+    engine::Mesh crate_mesh;
+    crate_mesh.create(model_vertex_size);
+    crate_mesh.update(crate_geometry);
+    crate_mesh.attributes(model_vertex_attributes);
 
     #pragma endregion
     #pragma region UI
 
-    engine::base::geometry<engine::vertex::ui, engine::primitive::triangle> ui_geometry
+    engine::base::geometry<engine::vertex::sprite, engine::primitive::triangle> ui_geometry
     {
         {
             { { -100.0f,  100.0f }, { 0.0f, 0.0f } },
@@ -278,15 +215,14 @@ int32_t main()
     const std::vector<engine::vertex::attribute> ui_attributes
     {
         { 0, 2, engine::opengl::type_float  },
-        { 1, 2, engine::opengl::type_float, offsetof(engine::vertex::ui, uv) }
+        { 1, 2, engine::opengl::type_float, offsetof(engine::vertex::sprite, uv) }
     };
 
-    engine::Mesh ui_mesh { engine::opengl::triangles };
+    engine::Mesh ui_mesh;
 
-    ui_mesh.create(sizeof(engine::vertex::ui));
-    ui_mesh.attributes(ui_attributes);
-
+    ui_mesh.create(sizeof(engine::vertex::sprite));
     ui_mesh.update(ui_geometry);
+    ui_mesh.attributes(ui_attributes);
 
     #pragma endregion
 
@@ -371,12 +307,13 @@ int32_t main()
 
     #pragma endregion
 
-    editor::ModelRenderer default_model_renderer;
-    default_model_renderer.attach(&default_shader);
-    default_model_renderer.attach(&material_buffer);
+    engine::renderer::Model default_base_renderer;
+    default_base_renderer.attach(&default_shader);
+    default_base_renderer.attach(&material_buffer);
 
-    engine::renderer::Model model_renderer;
-    model_renderer.attach(&model_shader);
+    engine::renderer::Model default_model_renderer;
+    default_model_renderer.attach(&model_shader);
+    default_model_renderer.attach(&material_buffer);
 
     engine::WindowManager::instance().resize_callback([&camera_buffer, &camera]
     {
@@ -426,13 +363,13 @@ int32_t main()
         engine::opengl::Commands::clear(1.0f, 0.5f, 0.0f);
         engine::opengl::Commands::clear(engine::opengl::color_buffer | engine::opengl::depth_buffer);
 
-        default_model_renderer.bind();
+        default_base_renderer.begin();
 
-        default_model_renderer.draw(&plane_vertex_array,   plane_matrix,   plane_color,   static_cast<int32_t>(plane_faces.size()));
-        default_model_renderer.draw(&box_vertex_array,     box_matrix,     box_color,     static_cast<int32_t>(box_faces.size()));
-        default_model_renderer.draw(&sphere_vertex_array,  sphere_matrix,  sphere_color,  static_cast<int32_t>(sphere_faces.size()));
-        default_model_renderer.draw(&capsule_vertex_array, capsule_matrix, capsule_color, static_cast<int32_t>(capsule_faces.size()));
-        default_model_renderer.draw(&crate_vertex_array,   crate_matrix,   box_color,     static_cast<int32_t>(crate_faces.size()));
+        default_base_renderer.draw(&plane_mesh,   plane_matrix,   plane_color);
+        default_base_renderer.draw(&box_mesh,     box_matrix,     box_color);
+        default_base_renderer.draw(&sphere_mesh,  sphere_matrix,  sphere_color);
+        default_base_renderer.draw(&capsule_mesh, capsule_matrix, capsule_color);
+        default_base_renderer.draw(&crate_mesh,   crate_matrix,   box_color);
 
         #pragma endregion
         #pragma region Engine
@@ -441,12 +378,12 @@ int32_t main()
 
         engine::opengl::Commands::viewport(width, 0, width, height);
 
-        engine::opengl::Commands::clear(r, g, b);
+        //engine::opengl::Commands::clear(r, g, b);
         //engine::opengl::Commands::clear(engine::opengl::color_buffer | engine::opengl::depth_buffer);
 
-        model_renderer.bind();
+        default_model_renderer.begin();
 
-        model_renderer.draw(&crate_vertex_array, &crate_texture, crate_matrix, static_cast<int32_t>(crate_faces.size()));
+        default_model_renderer.draw(&crate_mesh, crate_matrix, &crate_texture);
 
         #pragma endregion
         #pragma region UI
@@ -477,29 +414,18 @@ int32_t main()
         engine::WindowManager::instance().update();
     }
 
-    #pragma region Buffers
+    #pragma region Meshes
+
+    plane_mesh.destroy();
+    box_mesh.destroy();
+    sphere_mesh.destroy();
+    capsule_mesh.destroy();
+    crate_mesh.destroy();
 
     ui_mesh.destroy();
 
-    plane_index_buffer.destroy();
-    plane_vertex_buffer.destroy();
-    plane_vertex_array.destroy();
-
-    box_index_buffer.destroy();
-    box_vertex_buffer.destroy();
-    box_vertex_array.destroy();
-
-    sphere_index_buffer.destroy();
-    sphere_vertex_buffer.destroy();
-    sphere_vertex_array.destroy();
-
-    capsule_index_buffer.destroy();
-    capsule_vertex_buffer.destroy();
-    capsule_vertex_array.destroy();
-
-    crate_index_buffer.destroy();
-    crate_vertex_buffer.destroy();
-    crate_vertex_array.destroy();
+    #pragma endregion
+    #pragma region Buffers
 
     material_buffer.destroy();
     camera_buffer.destroy();
@@ -512,10 +438,13 @@ int32_t main()
     model_shader.destroy();
 
     #pragma endregion
+    #pragma region Textures
 
     crate_texture.destroy();
 
     default_sampler.destroy();
+
+    #pragma endregion
 
     engine::WindowManager::instance().destroy();
 
