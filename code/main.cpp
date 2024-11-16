@@ -6,14 +6,15 @@
 #include <opengl/pipeline.hpp>
 #include <opengl/sampler.hpp>
 
+#include <renderer/sprite.hpp>
 #include <renderer/model.hpp>
 
 #include <data/material.hpp>
 #include <data/camera.hpp>
 #include <data/light.hpp>
 
-#include <vertex/model.hpp>
 #include <vertex/sprite.hpp>
+#include <vertex/model.hpp>
 
 #include <image/tga.hpp>
 
