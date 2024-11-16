@@ -109,14 +109,14 @@ int32_t main()
     #pragma endregion
     #pragma region Meshes
 
-    constexpr auto  debug_vertex_size = sizeof(editor::vertex::debug);
+    constexpr auto  debug_vertex_size = sizeof(editor::core::vertex::debug);
     constexpr auto  model_vertex_size = sizeof(engine::vertex::model);
     constexpr auto sprite_vertex_size = sizeof(engine::vertex::sprite);
 
     const std::vector<engine::vertex::attribute> debug_vertex_attributes
     {
         { 0, 3, engine::opengl::type_float  },
-        { 1, 3, engine::opengl::type_float, offsetof(editor::vertex::debug, extra) }
+        { 1, 3, engine::opengl::type_float, offsetof(editor::core::vertex::debug, extra) }
     };
 
     const std::vector<engine::vertex::attribute> model_vertex_attributes
