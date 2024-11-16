@@ -30,14 +30,14 @@ int32_t main()
 {
     const std::string assets_folder = "../assets/";
 
-    tools::ShaderConverter::convert("default_base_shader",   assets_folder);
-    tools::ShaderConverter::convert("default_model_shader",  assets_folder);
-    tools::ShaderConverter::convert("default_sprite_shader", assets_folder);
+    editor::tools::ShaderConverter::convert("default_base_shader",   assets_folder);
+    editor::tools::ShaderConverter::convert("default_model_shader",  assets_folder);
+    editor::tools::ShaderConverter::convert("default_sprite_shader", assets_folder);
 
-    engine::Platform::init();
+    engine::core::Platform::init();
 
-    engine::WindowManager::instance().create({ .size = { 2048, 1024 } }, { });
-    engine::WindowManager::instance().open();
+    engine::core::WindowManager::instance().create({ .size = { 2048, 1024 } }, { });
+    engine::core::WindowManager::instance().open();
 
     engine::core::Graphics::init();
 
@@ -49,10 +49,10 @@ int32_t main()
     engine::opengl::ShaderStage default_fragment_stage { engine::opengl::shader::fragment };
 
     default_vertex_stage.create();
-    default_vertex_stage.source(engine::File::read("default_base_shader.vert",   std::ios::binary));
+    default_vertex_stage.source(engine::core::File::read("default_base_shader.vert",   std::ios::binary));
 
     default_fragment_stage.create();
-    default_fragment_stage.source(engine::File::read("default_base_shader.frag", std::ios::binary));
+    default_fragment_stage.source(engine::core::File::read("default_base_shader.frag", std::ios::binary));
 
     engine::opengl::Shader default_shader;
     default_shader.create();
@@ -70,10 +70,10 @@ int32_t main()
     engine::opengl::ShaderStage default_ui_fragment_stage { engine::opengl::shader::fragment };
 
     default_ui_vertex_stage.create();
-    default_ui_vertex_stage.source(engine::File::read("default_sprite_shader.vert",   std::ios::binary));
+    default_ui_vertex_stage.source(engine::core::File::read("default_sprite_shader.vert",   std::ios::binary));
 
     default_ui_fragment_stage.create();
-    default_ui_fragment_stage.source(engine::File::read("default_sprite_shader.frag", std::ios::binary));
+    default_ui_fragment_stage.source(engine::core::File::read("default_sprite_shader.frag", std::ios::binary));
 
     engine::opengl::Shader default_ui_shader;
     default_ui_shader.create();
@@ -91,10 +91,10 @@ int32_t main()
     engine::opengl::ShaderStage model_fragment_stage { engine::opengl::shader::fragment };
 
     model_vertex_stage.create();
-    model_vertex_stage.source(engine::File::read("default_model_shader.vert",   std::ios::binary));
+    model_vertex_stage.source(engine::core::File::read("default_model_shader.vert",   std::ios::binary));
 
     model_fragment_stage.create();
-    model_fragment_stage.source(engine::File::read("default_model_shader.frag", std::ios::binary));
+    model_fragment_stage.source(engine::core::File::read("default_model_shader.frag", std::ios::binary));
 
     engine::opengl::Shader model_shader;
     model_shader.create();
@@ -110,14 +110,14 @@ int32_t main()
     #pragma endregion
     #pragma region Meshes
 
-    constexpr auto  debug_vertex_size = sizeof(core::vertex::debug);
+    constexpr auto  debug_vertex_size = sizeof(editor::core::vertex::debug);
     constexpr auto  model_vertex_size = sizeof(engine::core::vertex::model);
     constexpr auto sprite_vertex_size = sizeof(engine::core::vertex::sprite);
 
     const std::vector<engine::core::vertex::attribute> debug_vertex_attributes
     {
         { 0, 3, engine::opengl::type_float  },
-        { 1, 3, engine::opengl::type_float, offsetof(core::vertex::debug, extra) }
+        { 1, 3, engine::opengl::type_float, offsetof(editor::core::vertex::debug, extra) }
     };
 
     const std::vector<engine::core::vertex::attribute> model_vertex_attributes
@@ -135,22 +135,22 @@ int32_t main()
 
     engine::core::Mesh plane_mesh;
     plane_mesh.create(debug_vertex_size);
-    plane_mesh.update(tools::PrimitiveGenerator::create_plane(10.0f, 10.0f));
+    plane_mesh.update(editor::tools::PrimitiveGenerator::create_plane(10.0f, 10.0f));
     plane_mesh.attributes(debug_vertex_attributes);
 
     engine::core::Mesh box_mesh;
     box_mesh.create(debug_vertex_size);
-    box_mesh.update(tools::PrimitiveGenerator::create_box());
+    box_mesh.update(editor::tools::PrimitiveGenerator::create_box());
     box_mesh.attributes(debug_vertex_attributes);
 
     engine::core::Mesh sphere_mesh;
     sphere_mesh.create(debug_vertex_size);
-    sphere_mesh.update(tools::PrimitiveGenerator::create_sphere());
+    sphere_mesh.update(editor::tools::PrimitiveGenerator::create_sphere());
     sphere_mesh.attributes(debug_vertex_attributes);
 
     engine::core::Mesh capsule_mesh;
     capsule_mesh.create(debug_vertex_size);
-    capsule_mesh.update(tools::PrimitiveGenerator::create_capsule());
+    capsule_mesh.update(editor::tools::PrimitiveGenerator::create_capsule());
     capsule_mesh.attributes(debug_vertex_attributes);
 
     #pragma endregion
@@ -160,28 +160,28 @@ int32_t main()
     constexpr float crate_half_y = 0.5f;
     constexpr float crate_half_z = 0.5f;
 
-    const engine::base::geometry<engine::core::vertex::model, engine::primitive::triangle> crate_geometry
+    const engine::core::base::geometry<engine::core::vertex::model, engine::core::primitive::triangle> crate_geometry
     {
         {
-            { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::front(), { 0.0f, 0.0f } },
-            { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::front(), { 1.0f, 0.0f } },
-            { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::front(), { 1.0f, 1.0f } },
-            { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::front(), { 0.0f, 1.0f } },
+            { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::math::vec3::front(), { 0.0f, 0.0f } },
+            { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::math::vec3::front(), { 1.0f, 0.0f } },
+            { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::math::vec3::front(), { 1.0f, 1.0f } },
+            { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::math::vec3::front(), { 0.0f, 1.0f } },
 
-            { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::back(), { 0.0f, 0.0f } },
-            { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::back(), { 1.0f, 0.0f } },
-            { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::back(), { 1.0f, 1.0f } },
-            { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::back(), { 0.0f, 1.0f } },
+            { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::math::vec3::back(), { 0.0f, 0.0f } },
+            { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::math::vec3::back(), { 1.0f, 0.0f } },
+            { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::math::vec3::back(), { 1.0f, 1.0f } },
+            { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::math::vec3::back(), { 0.0f, 1.0f } },
 
-            { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::left(), { 0.0f, 0.0f } },
-            { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::left(), { 1.0f, 0.0f } },
-            { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::left(), { 1.0f, 1.0f } },
-            { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::left(), { 0.0f, 1.0f } },
+            { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::math::vec3::left(), { 0.0f, 0.0f } },
+            { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::math::vec3::left(), { 1.0f, 0.0f } },
+            { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::math::vec3::left(), { 1.0f, 1.0f } },
+            { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::math::vec3::left(), { 0.0f, 1.0f } },
 
-            { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::right(), { 0.0f, 0.0f } },
-            { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::right(), { 1.0f, 0.0f } },
-            { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::right(), { 1.0f, 1.0f } },
-            { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::right(), { 0.0f, 1.0f } },
+            { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::math::vec3::right(), { 0.0f, 0.0f } },
+            { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::math::vec3::right(), { 1.0f, 0.0f } },
+            { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::math::vec3::right(), { 1.0f, 1.0f } },
+            { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::math::vec3::right(), { 0.0f, 1.0f } },
 
             { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::up(), { 0.0f, 0.0f } },
             { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::up(), { 1.0f, 0.0f } },
