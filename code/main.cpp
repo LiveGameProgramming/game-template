@@ -287,7 +287,7 @@ int32_t main()
 
     engine::opengl::Buffer camera_buffer;
     camera_buffer.create();
-    camera_buffer.bind(engine::core::buffer::location::camera);
+    camera_buffer.bind();
     camera_buffer.data(engine::core::buffer::data::create(&camera), engine::opengl::dynamic_draw);
 
     engine::opengl::Buffer material_buffer;
