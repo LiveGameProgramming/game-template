@@ -163,35 +163,35 @@ int32_t main()
     const engine::core::base::geometry<engine::core::vertex::model, engine::core::primitive::triangle> crate_geometry
     {
         {
-            { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::math::vec3::front(), { 0.0f, 0.0f } },
-            { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::math::vec3::front(), { 1.0f, 0.0f } },
-            { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::math::vec3::front(), { 1.0f, 1.0f } },
-            { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::math::vec3::front(), { 0.0f, 1.0f } },
+            { { -crate_half_x, -crate_half_y,  crate_half_z }, math::vec3::front(), { 0.0f, 0.0f } },
+            { {  crate_half_x, -crate_half_y,  crate_half_z }, math::vec3::front(), { 1.0f, 0.0f } },
+            { {  crate_half_x,  crate_half_y,  crate_half_z }, math::vec3::front(), { 1.0f, 1.0f } },
+            { { -crate_half_x,  crate_half_y,  crate_half_z }, math::vec3::front(), { 0.0f, 1.0f } },
 
-            { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::math::vec3::back(), { 0.0f, 0.0f } },
-            { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::math::vec3::back(), { 1.0f, 0.0f } },
-            { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::math::vec3::back(), { 1.0f, 1.0f } },
-            { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::math::vec3::back(), { 0.0f, 1.0f } },
+            { { -crate_half_x, -crate_half_y, -crate_half_z }, math::vec3::back(), { 0.0f, 0.0f } },
+            { { -crate_half_x,  crate_half_y, -crate_half_z }, math::vec3::back(), { 1.0f, 0.0f } },
+            { {  crate_half_x,  crate_half_y, -crate_half_z }, math::vec3::back(), { 1.0f, 1.0f } },
+            { {  crate_half_x, -crate_half_y, -crate_half_z }, math::vec3::back(), { 0.0f, 1.0f } },
 
-            { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::math::vec3::left(), { 0.0f, 0.0f } },
-            { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::math::vec3::left(), { 1.0f, 0.0f } },
-            { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::math::vec3::left(), { 1.0f, 1.0f } },
-            { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::math::vec3::left(), { 0.0f, 1.0f } },
+            { { -crate_half_x,  crate_half_y,  crate_half_z }, math::vec3::left(), { 0.0f, 0.0f } },
+            { { -crate_half_x,  crate_half_y, -crate_half_z }, math::vec3::left(), { 1.0f, 0.0f } },
+            { { -crate_half_x, -crate_half_y, -crate_half_z }, math::vec3::left(), { 1.0f, 1.0f } },
+            { { -crate_half_x, -crate_half_y,  crate_half_z }, math::vec3::left(), { 0.0f, 1.0f } },
 
-            { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::math::vec3::right(), { 0.0f, 0.0f } },
-            { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::math::vec3::right(), { 1.0f, 0.0f } },
-            { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::math::vec3::right(), { 1.0f, 1.0f } },
-            { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::math::vec3::right(), { 0.0f, 1.0f } },
+            { {  crate_half_x,  crate_half_y,  crate_half_z }, math::vec3::right(), { 0.0f, 0.0f } },
+            { {  crate_half_x, -crate_half_y,  crate_half_z }, math::vec3::right(), { 1.0f, 0.0f } },
+            { {  crate_half_x, -crate_half_y, -crate_half_z }, math::vec3::right(), { 1.0f, 1.0f } },
+            { {  crate_half_x,  crate_half_y, -crate_half_z }, math::vec3::right(), { 0.0f, 1.0f } },
 
-            { { -crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::up(), { 0.0f, 0.0f } },
-            { { -crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::up(), { 1.0f, 0.0f } },
-            { {  crate_half_x,  crate_half_y,  crate_half_z }, engine::vec3::up(), { 1.0f, 1.0f } },
-            { {  crate_half_x,  crate_half_y, -crate_half_z }, engine::vec3::up(), { 0.0f, 1.0f } },
+            { { -crate_half_x,  crate_half_y, -crate_half_z }, math::vec3::up(), { 0.0f, 0.0f } },
+            { { -crate_half_x,  crate_half_y,  crate_half_z }, math::vec3::up(), { 1.0f, 0.0f } },
+            { {  crate_half_x,  crate_half_y,  crate_half_z }, math::vec3::up(), { 1.0f, 1.0f } },
+            { {  crate_half_x,  crate_half_y, -crate_half_z }, math::vec3::up(), { 0.0f, 1.0f } },
 
-            { { -crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::down(), { 0.0f, 0.0f } },
-            { {  crate_half_x, -crate_half_y, -crate_half_z }, engine::vec3::down(), { 1.0f, 0.0f } },
-            { {  crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::down(), { 1.0f, 1.0f } },
-            { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::down(), { 0.0f, 1.0f } },
+            { { -crate_half_x, -crate_half_y, -crate_half_z }, math::vec3::down(), { 0.0f, 0.0f } },
+            { {  crate_half_x, -crate_half_y, -crate_half_z }, math::vec3::down(), { 1.0f, 0.0f } },
+            { {  crate_half_x, -crate_half_y,  crate_half_z }, math::vec3::down(), { 1.0f, 1.0f } },
+            { { -crate_half_x, -crate_half_y,  crate_half_z }, math::vec3::down(), { 0.0f, 1.0f } },
         },
         {
             {  0,  1,  2 }, {  2,  3,  0 }, // front face
@@ -244,19 +244,19 @@ int32_t main()
 
     #pragma endregion
 
-    engine::Time time;
+    engine::core::Time time;
     time.init();
 
-    engine::window::size window_size
+    engine::core::window::size window_size
     {
-        engine::WindowManager::instance().width() / 2,
-        engine::WindowManager::instance().height()
+        engine::core::WindowManager::instance().width() / 2,
+        engine::core::WindowManager::instance().height()
     };
 
     engine::core::data::camera camera;
     camera.projection.perspective(60.0f, window_size.ratio());
 
-    engine::vec3     camera_position { 0.0f, 2.5, 7.5f };
+    math::vec3       camera_position  { 0.0f, 2.5, 7.5f };
     camera.view.look(camera_position, { });
 
     engine::core::data::light light
@@ -267,38 +267,38 @@ int32_t main()
 
     engine::core::data::material material;
 
-    engine::mat4 plane_matrix;
+    math::mat4 plane_matrix;
     plane_matrix.identity();
 
-    engine::mat4 sphere_matrix;
+    math::mat4 sphere_matrix;
     sphere_matrix.identity();
     sphere_matrix.translate({ 2.0f, 1.0f, -2.0f });
 
-    engine::mat4 capsule_matrix;
+    math::mat4 capsule_matrix;
     capsule_matrix.identity();
     capsule_matrix.translate({ 2.0f, 1.0f, 2.0f });
 
-    constexpr engine::rgb plane_color   { 0.5f, 0.5f, 1.0f };
-    constexpr engine::rgb box_color     { 0.0f, 1.0f, 1.0f };
-    constexpr engine::rgb sphere_color  { 1.0f, 1.0f, 0.0f };
-    constexpr engine::rgb capsule_color { 1.0f, 0.5f, 0.5f };
+    constexpr math::rgb plane_color   { 0.5f, 0.5f, 1.0f };
+    constexpr math::rgb box_color     { 0.0f, 1.0f, 1.0f };
+    constexpr math::rgb sphere_color  { 1.0f, 1.0f, 0.0f };
+    constexpr math::rgb capsule_color { 1.0f, 0.5f, 0.5f };
 
     #pragma region Uniform Buffers
 
     engine::opengl::Buffer camera_buffer;
     camera_buffer.create();
-    camera_buffer.bind(engine::core::data::buffer_location::camera);
-    camera_buffer.data(engine::core::data::buffer::create(&camera), engine::opengl::dynamic_draw);
+    camera_buffer.bind(engine::core::buffer::location::camera);
+    camera_buffer.data(engine::core::buffer::data::create(&camera), engine::opengl::dynamic_draw);
 
     engine::opengl::Buffer material_buffer;
     material_buffer.create();
-    material_buffer.bind(engine::core::data::buffer_location::material);
-    material_buffer.data(engine::core::data::buffer::create(&material), engine::opengl::dynamic_draw);
+    material_buffer.bind(engine::core::buffer::location::material);
+    material_buffer.data(engine::core::buffer::data::create(&material), engine::opengl::dynamic_draw);
 
     engine::opengl::Buffer light_buffer;
     light_buffer.create();
-    light_buffer.bind(engine::core::data::buffer_location::light);
-    light_buffer.data(engine::core::data::buffer::create(&light));
+    light_buffer.bind(engine::core::buffer::location::light);
+    light_buffer.data(engine::core::buffer::data::create(&light));
 
     #pragma endregion
     #pragma region Renderers
@@ -313,43 +313,43 @@ int32_t main()
 
     #pragma endregion
 
-    engine::WindowManager::instance().on_size([&window_size, &camera_buffer, &camera]
+    engine::core::WindowManager::instance().on_size([&window_size, &camera_buffer, &camera]
     {
        window_size =
        {
-           engine::WindowManager::instance().width() / 2,
-           engine::WindowManager::instance().height()
+           engine::core::WindowManager::instance().width() / 2,
+           engine::core::WindowManager::instance().height()
        };
 
         camera.projection.perspective(60.0f, window_size.ratio());
-        camera_buffer.update(engine::core::data::buffer::create(&camera.projection), offsetof(engine::core::data::camera, projection));
+        camera_buffer.update(engine::core::buffer::data::create(&camera.projection), offsetof(engine::core::data::camera, projection));
     });
 
-    while (engine::WindowManager::instance().is_active())
+    while (engine::core::WindowManager::instance().is_active())
     {
         time.update();
 
         constexpr float camera_speed  = 0.25f;
         constexpr float camera_radius = 7.50f;
 
-        camera_position.x = engine::sin(engine::Time::total_time() * camera_speed) * -camera_radius;
-        camera_position.z = engine::cos(engine::Time::total_time() * camera_speed) *  camera_radius;
+        camera_position.x = math::sin(engine::core::Time::total_time() * camera_speed) * -camera_radius;
+        camera_position.z = math::cos(engine::core::Time::total_time() * camera_speed) *  camera_radius;
 
         camera.view.look(camera_position, { });
-        camera_buffer.update(engine::core::data::buffer::create(&camera.view));
+        camera_buffer.update(engine::core::buffer::data::create(&camera.view));
 
-        engine::quat box_orientation;
-        box_orientation.rotate({ 0.0f, 1.0f, 0.0f }, engine::Time::total_time() * 90.0f);
+        math::quat box_orientation;
+        box_orientation.rotate({ 0.0f, 1.0f, 0.0f }, engine::core::Time::total_time() * 90.0f);
 
-        engine::mat4 box_matrix;
+        math::mat4 box_matrix;
         box_matrix.identity();
         box_matrix.translate({ -2.0f, 1.0f, 2.0f });
         box_matrix *= box_orientation;
 
-        engine::quat crate_orientation;
-        crate_orientation.rotate({ 1.0f, 0.0f, 0.0f }, engine::Time::total_time() * 45.0f);
+        math::quat crate_orientation;
+        crate_orientation.rotate({ 1.0f, 0.0f, 0.0f }, engine::core::Time::total_time() * 45.0f);
 
-        engine::mat4 crate_matrix;
+        math::mat4 crate_matrix;
         crate_matrix.identity();
         crate_matrix.translate({ -2.0f, 1.0f, -2.0f });
         crate_matrix *= crate_orientation;
@@ -372,7 +372,7 @@ int32_t main()
         #pragma endregion
         #pragma region Engine
 
-        const auto [r, g, b] = engine::rgb::black();
+        const auto [r, g, b] = math::rgb::black();
 
         engine::opengl::Commands::viewport(window_size.width(), 0, window_size.width(), window_size.height());
 
@@ -386,13 +386,13 @@ int32_t main()
         #pragma endregion
         #pragma region UI
 
-        engine::mat4 sprite_model;
+        math::mat4 sprite_model;
         sprite_model.identity();
 
-        engine::mat4 ui_view;
+        math::mat4 ui_view;
         ui_view.identity();
 
-        engine::mat4 ui_projection;
+        math::mat4 ui_projection;
         ui_projection.orthographic(0, static_cast<float>(window_size.width()), static_cast<float>(window_size.height()), 0);
 
         default_ui_shader.bind();
@@ -404,11 +404,11 @@ int32_t main()
 
         sprite_mesh.bind();
 
-        engine::opengl::Commands::draw_indexed(engine::opengl::triangles, engine::primitive::triangle::elements * sprite_mesh.faces());
+        engine::opengl::Commands::draw_indexed(engine::opengl::triangles, engine::core::primitive::triangle::elements * sprite_mesh.faces());
 
         #pragma endregion
 
-        engine::WindowManager::instance().update();
+        engine::core::WindowManager::instance().update();
     }
 
     #pragma region Meshes
@@ -443,7 +443,7 @@ int32_t main()
 
     #pragma endregion
 
-    engine::WindowManager::instance().destroy();
+    engine::core::WindowManager::instance().destroy();
 
     return 0;
 }
