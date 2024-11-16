@@ -6,22 +6,23 @@
 #include <opengl/pipeline.hpp>
 #include <opengl/sampler.hpp>
 
-#include <renderer/sprite.hpp>
-#include <renderer/model.hpp>
+#include <graphics/sprite_renderer.hpp>
+#include <graphics/model_renderer.hpp>
 
 #include <data/material.hpp>
 #include <data/camera.hpp>
 #include <data/light.hpp>
 
-#include <vertex/sprite.hpp>
-#include <vertex/model.hpp>
+#include <core/graphics.hpp>
+
+#include <core/vertex/sprite.hpp>
+#include <core/vertex/model.hpp>
 
 #include <image/tga.hpp>
 
-#include <window_manager.hpp>
+#include <core/window_manager.hpp>
 #include <functions.hpp>
-#include <graphics.hpp>
-#include <platform.hpp>
+#include <core/platform.hpp>
 #include <time.hpp>
 #include <file.hpp>
 
@@ -29,16 +30,16 @@ int32_t main()
 {
     const std::string assets_folder = "../assets/";
 
-    editor::tools::ShaderConverter::convert("default_base_shader",   assets_folder);
-    editor::tools::ShaderConverter::convert("default_model_shader",  assets_folder);
-    editor::tools::ShaderConverter::convert("default_sprite_shader", assets_folder);
+    tools::ShaderConverter::convert("default_base_shader",   assets_folder);
+    tools::ShaderConverter::convert("default_model_shader",  assets_folder);
+    tools::ShaderConverter::convert("default_sprite_shader", assets_folder);
 
     engine::Platform::init();
 
     engine::WindowManager::instance().create({ .size = { 2048, 1024 } }, { });
     engine::WindowManager::instance().open();
 
-    engine::Graphics::init();
+    engine::core::Graphics::init();
 
     #pragma region Shaders
 
@@ -109,47 +110,47 @@ int32_t main()
     #pragma endregion
     #pragma region Meshes
 
-    constexpr auto  debug_vertex_size = sizeof(editor::core::vertex::debug);
-    constexpr auto  model_vertex_size = sizeof(engine::vertex::model);
-    constexpr auto sprite_vertex_size = sizeof(engine::vertex::sprite);
+    constexpr auto  debug_vertex_size = sizeof(core::vertex::debug);
+    constexpr auto  model_vertex_size = sizeof(engine::core::vertex::model);
+    constexpr auto sprite_vertex_size = sizeof(engine::core::vertex::sprite);
 
-    const std::vector<engine::vertex::attribute> debug_vertex_attributes
+    const std::vector<engine::core::vertex::attribute> debug_vertex_attributes
     {
         { 0, 3, engine::opengl::type_float  },
-        { 1, 3, engine::opengl::type_float, offsetof(editor::core::vertex::debug, extra) }
+        { 1, 3, engine::opengl::type_float, offsetof(core::vertex::debug, extra) }
     };
 
-    const std::vector<engine::vertex::attribute> model_vertex_attributes
+    const std::vector<engine::core::vertex::attribute> model_vertex_attributes
     {
         { 0, 3, engine::opengl::type_float  },
-        { 1, 3, engine::opengl::type_float, offsetof(engine::vertex::model, normal) },
-        { 2, 2, engine::opengl::type_float, offsetof(engine::vertex::model, uv)     }
+        { 1, 3, engine::opengl::type_float, offsetof(engine::core::vertex::model, normal) },
+        { 2, 2, engine::opengl::type_float, offsetof(engine::core::vertex::model, uv)     }
     };
 
-    const std::vector<engine::vertex::attribute> sprite_vertex_attributes
+    const std::vector<engine::core::vertex::attribute> sprite_vertex_attributes
     {
         { 0, 2, engine::opengl::type_float  },
-        { 1, 2, engine::opengl::type_float, offsetof(engine::vertex::sprite, uv) }
+        { 1, 2, engine::opengl::type_float, offsetof(engine::core::vertex::sprite, uv) }
     };
 
     engine::core::Mesh plane_mesh;
     plane_mesh.create(debug_vertex_size);
-    plane_mesh.update(editor::tools::PrimitiveGenerator::create_plane(10.0f, 10.0f));
+    plane_mesh.update(tools::PrimitiveGenerator::create_plane(10.0f, 10.0f));
     plane_mesh.attributes(debug_vertex_attributes);
 
     engine::core::Mesh box_mesh;
     box_mesh.create(debug_vertex_size);
-    box_mesh.update(editor::tools::PrimitiveGenerator::create_box());
+    box_mesh.update(tools::PrimitiveGenerator::create_box());
     box_mesh.attributes(debug_vertex_attributes);
 
     engine::core::Mesh sphere_mesh;
     sphere_mesh.create(debug_vertex_size);
-    sphere_mesh.update(editor::tools::PrimitiveGenerator::create_sphere());
+    sphere_mesh.update(tools::PrimitiveGenerator::create_sphere());
     sphere_mesh.attributes(debug_vertex_attributes);
 
     engine::core::Mesh capsule_mesh;
     capsule_mesh.create(debug_vertex_size);
-    capsule_mesh.update(editor::tools::PrimitiveGenerator::create_capsule());
+    capsule_mesh.update(tools::PrimitiveGenerator::create_capsule());
     capsule_mesh.attributes(debug_vertex_attributes);
 
     #pragma endregion
@@ -159,7 +160,7 @@ int32_t main()
     constexpr float crate_half_y = 0.5f;
     constexpr float crate_half_z = 0.5f;
 
-    const engine::base::geometry<engine::vertex::model, engine::primitive::triangle> crate_geometry
+    const engine::base::geometry<engine::core::vertex::model, engine::primitive::triangle> crate_geometry
     {
         {
             { { -crate_half_x, -crate_half_y,  crate_half_z }, engine::vec3::front(), { 0.0f, 0.0f } },
@@ -252,19 +253,19 @@ int32_t main()
         engine::WindowManager::instance().height()
     };
 
-    engine::data::camera camera;
+    engine::core::data::camera camera;
     camera.projection.perspective(60.0f, window_size.ratio());
 
     engine::vec3     camera_position { 0.0f, 2.5, 7.5f };
     camera.view.look(camera_position, { });
 
-    engine::data::light light
+    engine::core::data::light light
     {
         .extra   { 0.0f, -1.0f, -1.0f },
         .ambient { 0.3f }
     };
 
-    engine::data::material material;
+    engine::core::data::material material;
 
     engine::mat4 plane_matrix;
     plane_matrix.identity();
@@ -286,27 +287,27 @@ int32_t main()
 
     engine::opengl::Buffer camera_buffer;
     camera_buffer.create();
-    camera_buffer.bind();
-    camera_buffer.data(engine::buffer::data::create(&camera), engine::opengl::dynamic_draw);
+    camera_buffer.bind(engine::core::data::buffer_location::camera);
+    camera_buffer.data(engine::core::data::buffer::create(&camera), engine::opengl::dynamic_draw);
 
     engine::opengl::Buffer material_buffer;
     material_buffer.create();
-    material_buffer.bind(engine::buffer::location::material);
-    material_buffer.data(engine::buffer::data::create(&material), engine::opengl::dynamic_draw);
+    material_buffer.bind(engine::core::data::buffer_location::material);
+    material_buffer.data(engine::core::data::buffer::create(&material), engine::opengl::dynamic_draw);
 
     engine::opengl::Buffer light_buffer;
     light_buffer.create();
-    light_buffer.bind(engine::buffer::location::light);
-    light_buffer.data(engine::buffer::data::create(&light));
+    light_buffer.bind(engine::core::data::buffer_location::light);
+    light_buffer.data(engine::core::data::buffer::create(&light));
 
     #pragma endregion
     #pragma region Renderers
 
-    engine::renderer::Model default_base_renderer;
+    engine::graphics::ModelRenderer default_base_renderer;
     default_base_renderer.attach(&default_shader);
     default_base_renderer.attach(&material_buffer);
 
-    engine::renderer::Model default_model_renderer;
+    engine::graphics::ModelRenderer default_model_renderer;
     default_model_renderer.attach(&model_shader);
     default_model_renderer.attach(&material_buffer);
 
@@ -321,7 +322,7 @@ int32_t main()
        };
 
         camera.projection.perspective(60.0f, window_size.ratio());
-        camera_buffer.update(engine::buffer::data::create(&camera.projection), offsetof(engine::data::camera, projection));
+        camera_buffer.update(engine::core::data::buffer::create(&camera.projection), offsetof(engine::core::data::camera, projection));
     });
 
     while (engine::WindowManager::instance().is_active())
@@ -335,7 +336,7 @@ int32_t main()
         camera_position.z = engine::cos(engine::Time::total_time() * camera_speed) *  camera_radius;
 
         camera.view.look(camera_position, { });
-        camera_buffer.update(engine::buffer::data::create(&camera.view));
+        camera_buffer.update(engine::core::data::buffer::create(&camera.view));
 
         engine::quat box_orientation;
         box_orientation.rotate({ 0.0f, 1.0f, 0.0f }, engine::Time::total_time() * 90.0f);
