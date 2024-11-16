@@ -1,7 +1,7 @@
 #=======================================================================================================================
 add_executable(game)
 #=======================================================================================================================
-target_link_libraries(game PRIVATE engine core math graphics platform resources)
+target_link_libraries(game PRIVATE engine platform resources)
 target_link_libraries(game PRIVATE editor)
        target_sources(game PRIVATE main.cpp)
 #=======================================================================================================================

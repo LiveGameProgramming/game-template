@@ -245,14 +245,17 @@ int32_t main()
     engine::Time time;
     time.init();
 
-    int32_t width  = engine::WindowManager::instance().width() / 2;
-    int32_t height = engine::WindowManager::instance().height();
-
-    engine::vec3 camera_position { 0.0f, 2.5, 7.5f };
+    engine::window::size window_size
+    {
+        engine::WindowManager::instance().width() / 2,
+        engine::WindowManager::instance().height()
+    };
 
     engine::data::camera camera;
+    camera.projection.perspective(60.0f, window_size.ratio());
+
+    engine::vec3     camera_position { 0.0f, 2.5, 7.5f };
     camera.view.look(camera_position, { });
-    camera.projection.perspective(60.0f, static_cast<float>(width) / static_cast<float>(height));
 
     engine::data::light light
     {
@@ -283,12 +286,12 @@ int32_t main()
     engine::opengl::Buffer camera_buffer;
     camera_buffer.create();
     camera_buffer.bind();
-    camera_buffer.data(engine::buffer::data::create(&camera));
+    camera_buffer.data(engine::buffer::data::create(&camera), engine::opengl::dynamic_draw);
 
     engine::opengl::Buffer material_buffer;
     material_buffer.create();
     material_buffer.bind(engine::buffer::location::material);
-    material_buffer.data(engine::buffer::data::create(&material));
+    material_buffer.data(engine::buffer::data::create(&material), engine::opengl::dynamic_draw);
 
     engine::opengl::Buffer light_buffer;
     light_buffer.create();
@@ -296,6 +299,7 @@ int32_t main()
     light_buffer.data(engine::buffer::data::create(&light));
 
     #pragma endregion
+    #pragma region Renderers
 
     engine::renderer::Model default_base_renderer;
     default_base_renderer.attach(&default_shader);
@@ -305,12 +309,17 @@ int32_t main()
     default_model_renderer.attach(&model_shader);
     default_model_renderer.attach(&material_buffer);
 
-    engine::WindowManager::instance().resize_callback([&camera_buffer, &camera]
-    {
-        const int32_t width  = engine::WindowManager::instance().width() / 2;
-        const int32_t height = engine::WindowManager::instance().height();
+    #pragma endregion
 
-        camera.projection.perspective(60.0f, static_cast<float>(width) / static_cast<float>(height));
+    engine::WindowManager::instance().on_size([&window_size, &camera_buffer, &camera]
+    {
+       window_size =
+       {
+           engine::WindowManager::instance().width() / 2,
+           engine::WindowManager::instance().height()
+       };
+
+        camera.projection.perspective(60.0f, window_size.ratio());
         camera_buffer.update(engine::buffer::data::create(&camera.projection), offsetof(engine::data::camera, projection));
     });
 
@@ -343,12 +352,9 @@ int32_t main()
         crate_matrix.translate({ -2.0f, 1.0f, -2.0f });
         crate_matrix *= crate_orientation;
 
-        width  = engine::WindowManager::instance().width() / 2;
-        height = engine::WindowManager::instance().height();
-
         #pragma region Editor
 
-        engine::opengl::Commands::viewport(0, 0, width, height);
+        engine::opengl::Commands::viewport(0, 0, window_size.width(), window_size.height());
 
         engine::opengl::Commands::clear(1.0f, 0.5f, 0.0f);
         engine::opengl::Commands::clear(engine::opengl::color_buffer | engine::opengl::depth_buffer);
@@ -366,7 +372,7 @@ int32_t main()
 
         const auto [r, g, b] = engine::rgb::black();
 
-        engine::opengl::Commands::viewport(width, 0, width, height);
+        engine::opengl::Commands::viewport(window_size.width(), 0, window_size.width(), window_size.height());
 
         //engine::opengl::Commands::clear(r, g, b);
         //engine::opengl::Commands::clear(engine::opengl::color_buffer | engine::opengl::depth_buffer);
@@ -385,7 +391,7 @@ int32_t main()
         ui_view.identity();
 
         engine::mat4 ui_projection;
-        ui_projection.orthographic(0, static_cast<float>(width), static_cast<float>(height), 0);
+        ui_projection.orthographic(0, static_cast<float>(window_size.width()), static_cast<float>(window_size.height()), 0);
 
         default_ui_shader.bind();
         default_ui_shader.push(sprite_model);
