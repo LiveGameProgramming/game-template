@@ -1,30 +1,30 @@
-#include <../libraries/editor/code/tools/primitive_generator.hpp>
-#include <../libraries/engine/code/tools/sprite_generator.hpp>
-#include <../libraries/editor/code/tools/shader_converter.hpp>
+#include <tools/primitive_generator.hpp>
+#include <tools/sprite_generator.hpp>
+#include <tools/shader_converter.hpp>
 
-#include <../libraries/engine/modules/graphics/opengl/commands.hpp>
-#include <../libraries/engine/modules/graphics/opengl/pipeline.hpp>
-#include <../libraries/engine/modules/graphics/opengl/sampler.hpp>
+#include <opengl/commands.hpp>
+#include <opengl/pipeline.hpp>
+#include <opengl/sampler.hpp>
 
-#include <../libraries/engine/code/graphics/sprite_renderer.hpp>
-#include <../libraries/engine/code/graphics/model_renderer.hpp>
+#include <graphics/sprite_renderer.hpp>
+#include <graphics/model_renderer.hpp>
 
-#include <../libraries/engine/code/data/material.hpp>
-#include <../libraries/engine/code/data/camera.hpp>
-#include <../libraries/engine/code/data/light.hpp>
+#include <data/material.hpp>
+#include <data/camera.hpp>
+#include <data/light.hpp>
 
-#include <../libraries/engine/modules/graphics/core/graphics.hpp>
+#include <core/graphics.hpp>
 
-#include <../libraries/engine/code/core/vertex/sprite.hpp>
-#include <../libraries/engine/code/core/vertex/model.hpp>
+#include <core/vertex/sprite.hpp>
+#include <core/vertex/model.hpp>
 
-#include <../libraries/engine/modules/resources/image/tga.hpp>
+#include <image/tga.hpp>
 
-#include <../libraries/engine/modules/platform/core/window_manager.hpp>
-#include <functions.hpp>
-#include <../libraries/engine/modules/platform/core/platform.hpp>
-#include <../libraries/engine/modules/core/core/time.hpp>
-#include <../libraries/engine/modules/core/core/file.hpp>
+#include <core/window_manager.hpp>
+#include <math/functions.hpp>
+#include <core/platform.hpp>
+#include <core/time.hpp>
+#include <core/file.hpp>
 
 int32_t main()
 {
