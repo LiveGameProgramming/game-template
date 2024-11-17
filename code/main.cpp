@@ -159,7 +159,7 @@ int32_t main()
     constexpr float crate_half_y = 0.5f;
     constexpr float crate_half_z = 0.5f;
 
-    const core::base::geometry<core::vertex::model, core::primitive::triangle> crate_geometry
+    const core::base::geometry<core::vertex::model, primitive::triangle> crate_geometry
     {
         {
             { { -crate_half_x, -crate_half_y,  crate_half_z }, math::vec3::front(), { 0.0f, 0.0f } },
@@ -403,7 +403,7 @@ int32_t main()
 
         sprite_mesh.bind();
 
-        opengl::Commands::draw_indexed(opengl::triangles, core::primitive::triangle::elements * sprite_mesh.faces());
+        opengl::Commands::draw_indexed(opengl::triangles, primitive::triangle::elements * sprite_mesh.faces());
 
         #pragma endregion
 
