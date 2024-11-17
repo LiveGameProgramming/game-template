@@ -23,7 +23,7 @@
 #include <core/time.hpp>
 #include <core/file.hpp>
 
-#include <image/tga.hpp>
+#include <images/tga.hpp>
 
 int32_t main()
 {
@@ -159,7 +159,7 @@ int32_t main()
     constexpr float crate_half_y = 0.5f;
     constexpr float crate_half_z = 0.5f;
 
-    const core::base::geometry<core::vertex::model, primitive::triangle> crate_geometry
+    const core::geometry<core::vertex::model, primitive::triangle> crate_geometry
     {
         {
             { { -crate_half_x, -crate_half_y,  crate_half_z }, math::vec3::front(), { 0.0f, 0.0f } },
@@ -233,7 +233,7 @@ int32_t main()
     #pragma endregion
     #pragma region Textures
 
-    auto [crate_image_width, crate_image_height, crate_image_pixels] = image::Tga::load("crate.tga");
+    auto [crate_image_width, crate_image_height, crate_image_pixels] = images::Tga::load("crate.tga");
 
     opengl::Texture crate_texture { opengl::texture::texture_2d, opengl::texture::rgb8, crate_image_width, crate_image_height };
 
