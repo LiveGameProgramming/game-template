@@ -371,7 +371,7 @@ int32_t main()
         #pragma endregion
         #pragma region Engine
 
-        const auto [r, g, b] = math::rgb::black();
+        //const auto [r, g, b] = math::rgb::black();
 
         opengl::Commands::viewport(window_size.width(), 0, window_size.width(), window_size.height());
 
