@@ -13,18 +13,17 @@
 #include <data/camera.hpp>
 #include <data/light.hpp>
 
-#include <core/graphics.hpp>
-
-#include <core/vertex/sprite.hpp>
-#include <core/vertex/model.hpp>
-
-#include <image/tga.hpp>
+#include <math/functions.hpp>
 
 #include <core/window_manager.hpp>
-#include <math/functions.hpp>
+#include <core/vertex/sprite.hpp>
+#include <core/vertex/model.hpp>
+#include <core/graphics.hpp>
 #include <core/platform.hpp>
 #include <core/time.hpp>
 #include <core/file.hpp>
+
+#include <image/tga.hpp>
 
 int32_t main()
 {
@@ -110,14 +109,14 @@ int32_t main()
     #pragma endregion
     #pragma region Meshes
 
-    constexpr auto  debug_vertex_size = sizeof(core::vertex::debug);
+    constexpr auto  debug_vertex_size = sizeof(debug::vertex);
     constexpr auto  model_vertex_size = sizeof(core::vertex::model);
     constexpr auto sprite_vertex_size = sizeof(core::vertex::sprite);
 
     const std::vector<core::vertex::attribute> debug_vertex_attributes
     {
         { 0, 3, opengl::type_float  },
-        { 1, 3, opengl::type_float, offsetof(core::vertex::debug, extra) }
+        { 1, 3, opengl::type_float, offsetof(debug::vertex, extra) }
     };
 
     const std::vector<core::vertex::attribute> model_vertex_attributes
