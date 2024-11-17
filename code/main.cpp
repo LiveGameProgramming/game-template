@@ -287,17 +287,17 @@ int32_t main()
     opengl::Buffer camera_buffer;
     camera_buffer.create();
     camera_buffer.bind();
-    camera_buffer.data(core::buffer::data::create(&camera), opengl::dynamic_draw);
+    camera_buffer.data(core::buffer::make_data(&camera), opengl::buffer::dynamic_draw);
 
     opengl::Buffer material_buffer;
     material_buffer.create();
     material_buffer.bind(core::buffer::location::material);
-    material_buffer.data(core::buffer::data::create(&material), opengl::dynamic_draw);
+    material_buffer.data(core::buffer::make_data(&material), opengl::buffer::dynamic_draw);
 
     opengl::Buffer light_buffer;
     light_buffer.create();
     light_buffer.bind(core::buffer::location::light);
-    light_buffer.data(core::buffer::data::create(&light));
+    light_buffer.data(core::buffer::make_data(&light));
 
     #pragma endregion
     #pragma region Renderers
@@ -321,7 +321,7 @@ int32_t main()
        };
 
         camera.projection.perspective(60.0f, window_size.ratio());
-        camera_buffer.update(core::buffer::data::create(&camera.projection), offsetof(core::data::camera, projection));
+        camera_buffer.update(core::buffer::make_data(&camera.projection), offsetof(core::data::camera, projection));
     });
 
     while (core::WindowManager::instance().is_active())
@@ -335,7 +335,7 @@ int32_t main()
         camera_position.z = math::cos(core::Time::total_time() * camera_speed) *  camera_radius;
 
         camera.view.look(camera_position, { });
-        camera_buffer.update(core::buffer::data::create(&camera.view));
+        camera_buffer.update(core::buffer::make_data(&camera.view));
 
         math::quat box_orientation;
         box_orientation.rotate({ 0.0f, 1.0f, 0.0f }, core::Time::total_time() * 90.0f);
