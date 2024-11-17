@@ -239,7 +239,7 @@ int32_t main()
 
     crate_texture.create();
     crate_texture.storage();
-    crate_texture.update(opengl::texture::rgb, crate_image_pixels.data());
+    crate_texture.update(opengl::texture::rgb, core::buffer::make_data(crate_image_pixels.data()));
 
     #pragma endregion
 
