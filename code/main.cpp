@@ -403,7 +403,7 @@ int32_t main()
 
         sprite_mesh.bind();
 
-        opengl::Commands::draw_indexed(opengl::triangles, primitive::triangle::elements * sprite_mesh.faces());
+        opengl::Commands::draw_indexed(opengl::triangles, primitive::triangle::elements * sprite_mesh.elements());
 
         #pragma endregion
 
