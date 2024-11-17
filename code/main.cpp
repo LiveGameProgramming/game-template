@@ -159,7 +159,7 @@ int32_t main()
     constexpr float crate_half_y = 0.5f;
     constexpr float crate_half_z = 0.5f;
 
-    const core::geometry<core::vertex::model, primitive::triangle> crate_geometry
+    const core::model_geometry crate_geometry
     {
         {
             { { -crate_half_x, -crate_half_y,  crate_half_z }, math::vec3::front(), { 0.0f, 0.0f } },
